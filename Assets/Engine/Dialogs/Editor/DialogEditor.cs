@@ -28,7 +28,7 @@ public class DialogEditor : MissionUSEditorWindow
 {
     public static DialogEditor Instance { get; private set; }
 
-    private const string PATH = "Assets/Engine/Data/Dialogs/Resources/";
+    public const string PATH = "Assets/Engine/Data/Dialogs/Resources/";
 
     private float _topBarHeight = 30;
     private float _sideBarWidth = 300;
@@ -275,6 +275,9 @@ public class DialogEditor : MissionUSEditorWindow
     {
         if (path == null)
             path = GetPath();
+
+        Debug.Log("exists: " + path + " : " + File.Exists(path));
+
         return File.Exists(path);
     }
 
@@ -589,21 +592,21 @@ public class DialogSaveAsPopup : MissionUSEditorWindow
     protected override void OnGUIDraw()
     {
         GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), InitEditor.Background);
-        var size = new Vector2(600, 300);
+        var size = new Vector2(600, 200);
         position = new Rect(_owner.position.x + _owner.position.width/2 - size.x/2, _owner.position.y + _owner.position.height/2 - size.y/2, size.x, size.y);
 
 
-        using (new GUILayout.AreaScope(new Rect(50, 50, 500, 200)))
+        using (new GUILayout.AreaScope(new Rect(50, 50, 500, 150)))
         {
             _saveAsId = EditorGUILayout.TextField("Save Dialog As:", _saveAsId);
 
-            if (_owner.DoesPathExist(_saveAsId))
+            if (_owner.DoesPathExist(DialogEditor.PATH + _saveAsId + ".txt"))
             {
                 EditorGUILayout.HelpBox("A dialog with this name already exists. Save to overwrite the existing dialog.", MessageType.Warning);
             }
         }
 
-        GUILayout.BeginArea(new Rect(425, 250, 600, 50));
+        GUILayout.BeginArea(new Rect(425, 160, 600, 50));
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Cancel"))
