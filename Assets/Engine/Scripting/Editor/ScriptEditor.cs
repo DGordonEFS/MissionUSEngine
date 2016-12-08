@@ -21,7 +21,7 @@ public class ScriptEditor : MissionUSEditorWindow
 
     private const float COL_WIDTH = 200;
     
-    [MenuItem("Mission US/ScriptEditor")]
+    [MenuItem("Mission US/Data/ScriptEditor")]
     static void Init()
     {
         if (Instance != null)
@@ -211,7 +211,7 @@ public class ScriptEditor : MissionUSEditorWindow
         
         GUILayout.BeginArea(new Rect(x + Pan.x + 160, y + Pan.y - 10, COL_WIDTH, 100));
         GUILayout.Space(10);
-        if (GUILayout.Button("Add Block"))
+        if (MUSEditor.EditorHelper.Button("Add Block"))
             blocks.Add(new ScriptWaitAction());
         GUILayout.EndArea();
         

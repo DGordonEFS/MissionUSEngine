@@ -25,12 +25,32 @@ public class MissionUSEditorHelper
             _menuToShow.ShowAsContext();
     }
 
-    public void CreateDropdown(int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
+    public bool Button(string text)
     {
-        CreateDropdown(null, index, choices, callback, option);
+        return GUILayout.Button(text);
     }
 
-    public void CreateDropdown(string label, int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
+    public bool Button(string text, GUIStyle style)
+    {
+        return GUILayout.Button(text, style);
+    }
+
+    public bool Button(string text, GUIStyle style, GUILayoutOption option)
+    {
+        return GUILayout.Button(text, style, option);
+    }
+
+    public bool Button(string text, GUILayoutOption option)
+    {
+        return GUILayout.Button(text, option);
+    }
+
+    public void Dropdown(int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
+    {
+        Dropdown(null, index, choices, callback, option);
+    }
+
+    public void Dropdown(string label, int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
     {
         if (choices.Count == 0)
             return;

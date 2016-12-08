@@ -7,7 +7,7 @@ public class VariableListEditor : MissionUSEditorWindow
     private static VariableList _globalVariables;
 
 
-    [MenuItem("Mission US/VariableEditor")]
+    [MenuItem("Mission US/Data/VariableEditor")]
     static void Init()
     {
         var window = EditorWindow.GetWindow<VariableListEditor>();
@@ -90,7 +90,7 @@ public class VariableListEditor : MissionUSEditorWindow
                     break;
                 case VariableData.VariableTypes.Bool:
                     newValue = value;
-                    MUSEditor.EditorHelper.CreateDropdown(bool.Parse(value) ? 1 : 0, VariableList.BoolTypes, (val) => {
+                    MUSEditor.EditorHelper.Dropdown(bool.Parse(value) ? 1 : 0, VariableList.BoolTypes, (val) => {
                         if (variables.HasKey(key))
                             variables.SetVariable(newKey, (val == 1).ToString(), VariableData.VariableTypes.Bool);
                     }, GUILayout.Width(105));
@@ -102,7 +102,7 @@ public class VariableListEditor : MissionUSEditorWindow
 
             
 
-            if (!GUILayout.Button("X"))
+            if (!MUSEditor.EditorHelper.Button("X"))
                 variables.SetVariable(newKey, newValue, (VariableData.VariableTypes)newType);
 
             EditorGUILayout.EndHorizontal();
@@ -110,7 +110,7 @@ public class VariableListEditor : MissionUSEditorWindow
             GUILayout.Space(2);
         }
 
-        if (GUILayout.Button("Add Variable"))
+        if (MUSEditor.EditorHelper.Button("Add Variable"))
         {
             variables.SetVariable("", "");
         }

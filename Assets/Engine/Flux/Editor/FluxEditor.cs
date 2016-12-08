@@ -10,7 +10,7 @@ public class FluxEditor : MissionUSEditorWindow
 {
 
 
-    [MenuItem("Mission US/History View")]
+    [MenuItem("Mission US/Debug/History View")]
     static void Init()
     {
         var window = EditorWindow.GetWindow<FluxEditor>();

@@ -7,7 +7,7 @@ using System.Linq;
 
 public class ErrorEditor : MissionUSEditorWindow
 {
-    [MenuItem ("Mission US/Error Panel")]
+    [MenuItem ("Mission US/Debug/Error Panel")]
     static void Init()
     {
         var window = EditorWindow.GetWindow<ErrorEditor>();

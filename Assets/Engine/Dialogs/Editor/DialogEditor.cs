@@ -52,7 +52,7 @@ public class DialogEditor : MissionUSEditorWindow
 
     private Dictionary<DialogResponse, DrawHandleData> _handles = new Dictionary<DialogResponse, DrawHandleData>();
 
-    [MenuItem("Mission US/DialogEditor")]
+    [MenuItem("Mission US/Data/DialogEditor")]
     static void Init()
     {
         var window = EditorWindow.GetWindow<DialogEditor>();
@@ -228,7 +228,7 @@ public class DialogEditor : MissionUSEditorWindow
         GUILayout.BeginArea(new Rect(0, 0, 400, Screen.height));
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("New Dialog"))
+        if (MUSEditor.EditorHelper.Button("New Dialog"))
         {
             ResetPan();
             Zoom = 1;
@@ -245,14 +245,14 @@ public class DialogEditor : MissionUSEditorWindow
             CurrentPageIndex = Pages.Count - 1;
         }
 
-        if (GUILayout.Button("Load Dialog"))
+        if (MUSEditor.EditorHelper.Button("Load Dialog"))
         {
             ResetPan();
             Zoom = 1;
             Load("test");
         }
 
-        if (GUILayout.Button("Save Dialog"))
+        if (MUSEditor.EditorHelper.Button("Save Dialog"))
         {
             if (Dialog.Id == null)
                 SaveAs();
@@ -260,7 +260,7 @@ public class DialogEditor : MissionUSEditorWindow
                 Save(GetPath());
         }
 
-        if (GUILayout.Button("Save Dialog As"))
+        if (MUSEditor.EditorHelper.Button("Save Dialog As"))
         {
             SaveAs();
         }
@@ -283,7 +283,7 @@ public class DialogEditor : MissionUSEditorWindow
             if (CurrentPage == page)
             {
                 GUIStyle style = "selectedtab";
-                if (GUILayout.Button(page.Dialog.Id, style))
+                if (MUSEditor.EditorHelper.Button(page.Dialog.Id, style))
                 {
                     CurrentPageIndex = i;
                 }
@@ -291,7 +291,7 @@ public class DialogEditor : MissionUSEditorWindow
             else
             {
                 GUIStyle style = "tab";
-                if (GUILayout.Button(page.Dialog.Id, style))
+                if (MUSEditor.EditorHelper.Button(page.Dialog.Id, style))
                 {
                     CurrentPageIndex = i;
                 }
@@ -342,7 +342,7 @@ public class DialogEditor : MissionUSEditorWindow
         GUILayout.BeginArea(new Rect(500, 0, 400, Screen.height));
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("New Node"))
+        if (MUSEditor.EditorHelper.Button("New Node"))
         {
             var node = Dialog.CreateNode(Dialog.GetUniqueId());
             node.AddPrompt("");
@@ -374,7 +374,7 @@ public class DialogEditor : MissionUSEditorWindow
             GUILayout.Space(30);
 
 
-            if (GUILayout.Button("P+"))
+            if (MUSEditor.EditorHelper.Button("P+"))
             {
                 node.AddPrompt("", "");
             }
@@ -393,13 +393,13 @@ public class DialogEditor : MissionUSEditorWindow
                     if (npcs.Contains(prompt.Npc))
                         indexOfId = npcs.IndexOf(prompt.Npc);
                     prompt.Npc = npcs[EditorGUILayout.Popup(indexOfId, npcs.ToArray(), GUILayout.Width(50))];
-                    if (GUILayout.Button("A"))
+                    if (MUSEditor.EditorHelper.Button("A"))
                     {
                     }
-                    if (GUILayout.Button("C"))
+                    if (MUSEditor.EditorHelper.Button("C"))
                     {
                     }
-                    if (GUILayout.Button("X"))
+                    if (MUSEditor.EditorHelper.Button("X"))
                     {
                         node.RemovePrompt(prompt);
                     }
@@ -410,7 +410,7 @@ public class DialogEditor : MissionUSEditorWindow
             EditorGUILayout.Space();
 
 
-            if (GUILayout.Button("R+"))
+            if (MUSEditor.EditorHelper.Button("R+"))
             {
                 node.AddResponse("", "");
             }
@@ -444,21 +444,21 @@ public class DialogEditor : MissionUSEditorWindow
                         break;
                     case DialogResponse.NextNodeTypes.Script:
                         response.NextNodeId = null;
-                        if (GUILayout.Button("N"))
+                        if (MUSEditor.EditorHelper.Button("N"))
                         {
                         }
                         break;
                 }
-                if (GUILayout.Button("D"))
+                if (MUSEditor.EditorHelper.Button("D"))
                 {
                 }
-                if (GUILayout.Button("A"))
+                if (MUSEditor.EditorHelper.Button("A"))
                 {
                 }
-                if (GUILayout.Button("C"))
+                if (MUSEditor.EditorHelper.Button("C"))
                 {
                 }
-                if (GUILayout.Button("X"))
+                if (MUSEditor.EditorHelper.Button("X"))
                 {
                     node.RemoveResponse(response);
                 }
@@ -570,12 +570,12 @@ public class DialogEditor : MissionUSEditorWindow
         GUILayout.BeginArea(new Rect(425, 250, 600, 50));
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Cancel"))
+        if (MUSEditor.EditorHelper.Button("Cancel"))
         {
             _saveAs = false;
         }
 
-        if (GUILayout.Button("Save As"))
+        if (MUSEditor.EditorHelper.Button("Save As"))
         {
             Dialog.Id = _saveAsId;
             Save(GetPath());
@@ -624,14 +624,14 @@ public class DialogSaveAsPopup : MissionUSEditorWindow
         GUILayout.BeginArea(new Rect(425, 160, 600, 50));
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Cancel"))
+        if (MUSEditor.EditorHelper.Button("Cancel"))
         {
             _owner.Enable = true;
             _owner.Repaint();
             Close();
         }
 
-        if (GUILayout.Button("Save As"))
+        if (MUSEditor.EditorHelper.Button("Save As"))
         {
             _owner.Enable = true;
             _owner.Dialog.Id = _saveAsId;

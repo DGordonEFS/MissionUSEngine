@@ -96,7 +96,7 @@ public class ScriptBlock
 
         EditorGUILayout.BeginHorizontal();
 
-        MUSEditor.EditorHelper.CreateDropdown(index, ids.ConvertAll((x) => Script.BlockGroupLookup[x] + "/" + x), (value) =>
+        MUSEditor.EditorHelper.Dropdown(index, ids.ConvertAll((x) => Script.BlockGroupLookup[x] + "/" + x), (value) =>
         {
             var newType = ids[value];
             if (newType != selectedType)
@@ -114,7 +114,7 @@ public class ScriptBlock
             if (container.Folded)
             {
                 offset = 80;
-                if (GUILayout.Button("Unfold", GUILayout.Width(60)))
+                if (MUSEditor.EditorHelper.Button("Unfold", GUILayout.Width(60)))
                 {
                     container.Folded = false;
                 }
@@ -122,7 +122,7 @@ public class ScriptBlock
             else
             {
                 offset = 70;
-                if (GUILayout.Button("Fold", GUILayout.Width(50)))
+                if (MUSEditor.EditorHelper.Button("Fold", GUILayout.Width(50)))
                 {
                     container.Folded = true;
                 }
@@ -131,7 +131,7 @@ public class ScriptBlock
         }
 
         GUILayout.Space(170 - offset);
-        if (GUILayout.Button("X"))
+        if (MUSEditor.EditorHelper.Button("X"))
         {
             IsDisposed = true;
         }
@@ -145,7 +145,7 @@ public class ScriptBlock
         GUILayout.Space(7);
         if (BlockingType == BlockingTypes.Optional)
         {
-            MUSEditor.EditorHelper.CreateDropdown("IsBlocking:", IsBlocking ? 1 : 0, VariableList.BoolTypes, (value) => IsBlocking = value == 1);
+            MUSEditor.EditorHelper.Dropdown("IsBlocking:", IsBlocking ? 1 : 0, VariableList.BoolTypes, (value) => IsBlocking = value == 1);
         }
         
     }
@@ -247,7 +247,7 @@ public class ScriptHotspotVisibleAction : ScriptHotspotAction
 #if UNITY_EDITOR
     protected override void OnGUIDraw(ScriptBlock prevBlock)
     {
-        MUSEditor.EditorHelper.CreateDropdown("Visible:", Visible ? 1 : 0, VariableList.BoolTypes, (value) => Visible = value == 1);
+        MUSEditor.EditorHelper.Dropdown("Visible:", Visible ? 1 : 0, VariableList.BoolTypes, (value) => Visible = value == 1);
     }
 
 #endif
@@ -309,7 +309,7 @@ public class ScriptSetVariableAction : ScriptAction
 
         int index = Mathf.Max(0, keys.IndexOf(VariableId)); // clamp to 0
         VariableId = keys[index];
-        MUSEditor.EditorHelper.CreateDropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
+        MUSEditor.EditorHelper.Dropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
         {
             if (value != index)
                 Value = null;
@@ -328,7 +328,7 @@ public class ScriptSetVariableAction : ScriptAction
         var valueKeys = variableList.GetKeys().FindAll((x) => Script.GlobalVariables.GetType(x) == type && x != VariableId); // only accept variables of the same type
         var valueIndex = Mathf.Max(0, valueKeys.IndexOf(Value)); // clamp to 0
 
-        MUSEditor.EditorHelper.CreateDropdown(valueIndex, valueKeys.ConvertAll((x) => group + "/" + x), (value) =>
+        MUSEditor.EditorHelper.Dropdown(valueIndex, valueKeys.ConvertAll((x) => group + "/" + x), (value) =>
         {
             Value = valueKeys[value];
         }, GUILayout.Width(150));
@@ -369,7 +369,7 @@ public class ScriptSetVariableUserAction : ScriptAction
 
         int index = Mathf.Max(0, keys.IndexOf(VariableId)); // clamp to 0
         VariableId = keys[index];
-        MUSEditor.EditorHelper.CreateDropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
+        MUSEditor.EditorHelper.Dropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
         {
             VariableId = keys[value];
 
@@ -405,7 +405,7 @@ public class ScriptSetVariableUserAction : ScriptAction
                 Value = EditorGUILayout.FloatField(float.Parse(Value)).ToString();
                 break;
             case VariableData.VariableTypes.Bool:
-                MUSEditor.EditorHelper.CreateDropdown(bool.Parse(Value != null ? Value : "false") ? 1 : 0, VariableList.BoolTypes, (value) =>
+                MUSEditor.EditorHelper.Dropdown(bool.Parse(Value != null ? Value : "false") ? 1 : 0, VariableList.BoolTypes, (value) =>
                 {
                     Value = (value == 1).ToString();
                 }, GUILayout.Width(150));

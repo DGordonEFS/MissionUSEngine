@@ -126,12 +126,6 @@ public class MissionUSEditorWindow : EditorWindow
 
     }
     
-    public void CreateDropdown(int index, List<string> choices, Action<int> callback)
-    {
-        _editorHelper.CreateDropdown(index, choices, callback);
-    }
-
-
     void OnGUI()
     {
         _editorHelper.Begin();
