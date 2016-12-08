@@ -24,18 +24,28 @@ public class ConnectionData
     public string To;
 }
 
+public class DialogEditorPage
+{
+    public Dialog Dialog = new Dialog() { Id = "Untitled" };
+    public List<DialogNode> Nodes;
+}
+
 public class DialogEditor : MissionUSEditorWindow
 {
     public static DialogEditor Instance { get; private set; }
 
     public const string PATH = "Assets/Engine/Data/Dialogs/Resources/";
-
-    private float _topBarHeight = 30;
-    private float _sideBarWidth = 300;
+    
     private Vector2 _scrollPos;
-    public Dialog Dialog { get; private set; }
+    public Dialog Dialog { get { return CurrentPage != null ? CurrentPage.Dialog : null; } }
 
-    private List<DialogNode> _nodes;
+    private List<DialogNode> Nodes { get { return CurrentPage != null ? CurrentPage.Nodes : null; } set { if (CurrentPage == null) return; CurrentPage.Nodes = value; } }
+
+    public int CurrentPageIndex { get; private set; }
+    public List <DialogEditorPage> Pages { get; private set; }
+    public DialogEditorPage CurrentPage { get { return Pages != null && CurrentPageIndex >= 0 && CurrentPageIndex < Pages.Count ? Pages[CurrentPageIndex] : null; } }
+
+
 
     private bool _saveAs;
     private string _saveAsId;
@@ -52,7 +62,11 @@ public class DialogEditor : MissionUSEditorWindow
         Instance = window;
         window.CanZoom = true;
         window.CanPan = true;
-        window.Dialog = new Dialog();
+        window.TopBar = true;
+        window.SecondaryBar = true;
+        window.MainArea = true;
+        window.Pages = new List<DialogEditorPage>();
+        window.Pages.Add(new DialogEditorPage());
     }
 
     void OnDestroy()
@@ -63,16 +77,16 @@ public class DialogEditor : MissionUSEditorWindow
     private void RefreshConnections()
     {
         var connections = new List<ConnectionData>();
-        for (int i = 0; i < _nodes.Count; i++)
+        for (int i = 0; i < Nodes.Count; i++)
         {
-            var node = _nodes[i];
+            var node = Nodes[i];
             if (node.From == null)
                 node.From = new Dictionary<string, float>();
         }
 
-        for (int i = 0; i < _nodes.Count; i++)
+        for (int i = 0; i < Nodes.Count; i++)
         {
-            var node = _nodes[i];
+            var node = Nodes[i];
 
             var removeFromList = new List<string>();
             foreach (var fromId in node.From.Keys)
@@ -139,17 +153,17 @@ public class DialogEditor : MissionUSEditorWindow
             startPos *= Zoom;
             endPos *= Zoom;
 
-            var handleLine = InitEditor.HandleLineGray;
+            var handleLine = MUSEditor.HandleLineGray;
 
             var color = Color.gray;
-            var arrow = InitEditor.ArrowGray;
+            var arrow = MUSEditor.ArrowGray;
             if (from.Used && to.Used)
             {
                 color = Color.green;
-                arrow = InitEditor.ArrowGreen;
+                arrow = MUSEditor.ArrowGreen;
             }
 
-            Handles.DrawBezier(startPos, endPos, startPos, endPos, color, InitEditor.HandleLine, 3);
+            Handles.DrawBezier(startPos, endPos, startPos, endPos, color, MUSEditor.HandleLine, 3);
 
             var diff = endPos - startPos;
             var angleBetween = Mathf.Atan2(diff.y, diff.x) * 180 / Mathf.PI + 180;
@@ -161,67 +175,52 @@ public class DialogEditor : MissionUSEditorWindow
             GUIUtility.RotateAroundPivot(angleBetween, centerPos);
             GUI.DrawTexture(new Rect(centerPos.x - arrowSize / 2, centerPos.y - arrowSize / 2, arrowSize, arrowSize), arrow);
             GUI.matrix = matrixBackup;
-
-            /*
-            if (startPos.x < endPos.x)
-            {
-                startPos.x += from.EditorPosition.width / 2;
-                endPos.x -= to.EditorPosition.width / 2;
-            }
-            else
-            {
-                startPos.x -= from.EditorPosition.width / 2;
-                endPos.x += to.EditorPosition.width / 2;
-            }
-
-            if (startPos.y < endPos.y)
-            {
-                startPos.y += from.EditorPosition.width / 2;
-                endPos.y -= to.EditorPosition.width / 2;
-            }
-            else
-            {
-                startPos.y -= from.EditorPosition.width / 2;
-                endPos.y += to.EditorPosition.width / 2;
-            }*/
-
         }
     }
     
     protected override void OnGUIDraw()
     {
-        if (Dialog != null)
-            _nodes = Dialog.GetNodes();
-        else
-            _nodes = new List<DialogNode>();
+        if (CurrentPage == null)
+            return;
 
-        
+        if (Dialog != null)
+            Nodes = Dialog.GetNodes();
+        else
+            Nodes = new List<DialogNode>();
         
         RefreshConnections();
-
-        var saveAs = _saveAs;
-        BeginZoom(Zoom, new Rect(0, 0, Screen.width, Screen.height));
-        BeginWindows();
-        DrawMainArea(saveAs);
-
-        DrawSaveAs(saveAs);
-        EndWindows();
-        EndZoom();
-
-        DrawTopBar(saveAs);
     }
     
-    void DrawTopBar(bool saveAs)
+    protected override void OnDrawTopBar()
     {
-        DrawToolbar(new Rect(0, 0, Screen.width, _topBarHeight));
-
-        GUILayout.BeginArea(new Rect(5, 0, Screen.width, _topBarHeight));
-        using (new EditorGUI.DisabledScope(saveAs))
+        using (new EditorGUI.DisabledScope(_saveAs))
         {
             DrawTopBarDialogButtons();
             DrawTopBarNodeButtons();
         }
-        GUILayout.EndArea();
+    }
+
+    protected override void OnDrawMainArea()
+    {
+        if (CurrentPage == null)
+            return;
+
+        using (new EditorGUI.DisabledScope(_saveAs))
+        {
+            using (new GUILayout.AreaScope(new Rect(100, 100, Screen.width / 2, Screen.height / 2)))
+            {
+                BeginZoom(Zoom, new Rect(0, 0, Screen.width, Screen.height));
+                for (int i = 0; i < Nodes.Count; i++)
+                {
+                    var node = Nodes[i];
+                    var pan = Pan;
+                    node.EditorPosition = GUILayout.Window(i, new Rect(node.EditorPosition.x + Pan.x, node.EditorPosition.y + Pan.y, node.EditorPosition.width, node.EditorPosition.height), DrawNode, "");
+                    node.EditorPosition.x -= pan.x;
+                    node.EditorPosition.y -= pan.y;
+                }
+                EndZoom();
+            }
+        }
     }
 
     void DrawTopBarDialogButtons()
@@ -233,13 +232,17 @@ public class DialogEditor : MissionUSEditorWindow
         {
             ResetPan();
             Zoom = 1;
-            Dialog = new Dialog();
-            Dialog.Id = "test";
-            var node = Dialog.CreateNode(Dialog.GetUniqueId());
+
+            var page = new DialogEditorPage();
+            Pages.Add(page);
+            page.Dialog = new Dialog();
+            page.Dialog.Id = "test";
+            var node = page.Dialog.CreateNode(page.Dialog.GetUniqueId());
             node.AddPrompt("");
             var response = node.AddResponse("");
             response.NextNodeType = DialogResponse.NextNodeTypes.End;
-            _nodes = Dialog.GetNodes();
+            page.Nodes = page.Dialog.GetNodes();
+            CurrentPageIndex = Pages.Count - 1;
         }
 
         if (GUILayout.Button("Load Dialog"))
@@ -266,6 +269,37 @@ public class DialogEditor : MissionUSEditorWindow
         GUILayout.EndArea();
     }
 
+    protected override void OnDrawSecondaryBar()
+    {
+        if (Pages == null)
+            return;
+
+        GUILayout.Space(15);
+        EditorGUILayout.BeginHorizontal();
+        for (int i = 0; i < Pages.Count; i++)
+        {
+            var page = Pages[i];
+
+            if (CurrentPage == page)
+            {
+                GUIStyle style = "selectedtab";
+                if (GUILayout.Button(page.Dialog.Id, style))
+                {
+                    CurrentPageIndex = i;
+                }
+            }
+            else
+            {
+                GUIStyle style = "tab";
+                if (GUILayout.Button(page.Dialog.Id, style))
+                {
+                    CurrentPageIndex = i;
+                }
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
     public string GetPath()
     {
         return PATH + Dialog.Id + ".txt";
@@ -275,16 +309,17 @@ public class DialogEditor : MissionUSEditorWindow
     {
         if (path == null)
             path = GetPath();
-
-        Debug.Log("exists: " + path + " : " + File.Exists(path));
-
+        
         return File.Exists(path);
     }
 
     public void Load(string dialogId)
     {
         var text = Resources.Load<TextAsset>(dialogId).text;
-        Dialog = JsonMapper.ToObject<Dialog>(text);
+        var page = new DialogEditorPage();
+        page.Dialog = JsonMapper.ToObject<Dialog>(text);
+        Pages.Add(page);
+        CurrentPageIndex = Pages.Count - 1;
     }
 
     public void Save(string path)
@@ -318,33 +353,13 @@ public class DialogEditor : MissionUSEditorWindow
         GUILayout.EndArea();
     }
 
-    void DrawMainArea(bool saveAs)
-    { 
-        using (new EditorGUI.DisabledScope(saveAs))
-        {
-            using (new GUILayout.AreaScope(new Rect(100, 100, Screen.width/2, Screen.height/2)))
-            {
-                BeginZoom(Zoom, new Rect(0, 0, Screen.width, Screen.height));
-                for (int i = 0; i < _nodes.Count; i++)
-                {
-                    var node = _nodes[i];
-                    var pan = Pan;
-                    node.EditorPosition = GUILayout.Window(i, new Rect(node.EditorPosition.x + Pan.x, node.EditorPosition.y + Pan.y, node.EditorPosition.width, node.EditorPosition.height), DrawNode, "");
-                    node.EditorPosition.x -= pan.x;
-                    node.EditorPosition.y -= pan.y;
-                }
-                EndZoom();
-            }
-        }
-    }
-
     void DrawNode(int nodeIndex)
     {
         using (new EditorGUI.DisabledScope(!Enable))
         {
-            var node = _nodes[nodeIndex];
+            var node = Nodes[nodeIndex];
 
-            GUI.Label(new Rect(node.EditorPosition.width / 2 - 25, 0, node.EditorPosition.width, _topBarHeight), node.Id, EditorStyles.largeLabel);
+            GUI.Label(new Rect(node.EditorPosition.width / 2 - 25, 15, node.EditorPosition.width, TopBarHeight), node.Id, EditorStyles.largeLabel);
             if (GUI.Button(new Rect(node.EditorPosition.width - 45, 25, 25, 25), "X"))
             {
                 Dialog.RemoveNode(node.Id);
@@ -533,7 +548,7 @@ public class DialogEditor : MissionUSEditorWindow
         DrawMask();
 
 
-        GUILayout.BeginArea(new Rect(0, _topBarHeight, Screen.width, Screen.height));
+        GUILayout.BeginArea(new Rect(0, TopBarHeight, Screen.width, Screen.height));
         
         GUI.Window(200, new Rect(Screen.width/2 - 300, Screen.height/2 - 150, 600, 300), DrawSaveAsWindow, "");
         
@@ -591,7 +606,7 @@ public class DialogSaveAsPopup : MissionUSEditorWindow
 
     protected override void OnGUIDraw()
     {
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), InitEditor.Background);
+        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), MUSEditor.Background);
         var size = new Vector2(600, 200);
         position = new Rect(_owner.position.x + _owner.position.width/2 - size.x/2, _owner.position.y + _owner.position.height/2 - size.y/2, size.x, size.y);
 

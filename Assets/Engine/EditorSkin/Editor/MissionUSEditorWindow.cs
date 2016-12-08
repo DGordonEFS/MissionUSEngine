@@ -1,13 +1,22 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class MissionUSEditorWindow : EditorWindow
 {
+    private MissionUSEditorHelper _editorHelper = new MissionUSEditorHelper();
+
+    public float TopBarHeight { get { return 30; } }
+    public float SecondaryBarHeight { get { return 30; } }
     public bool CanZoom = false;
     public bool CanPan = false;
     public float Zoom = 1;
+    public bool TopBar = false;
+    public bool SecondaryBar = false;
+    public bool MainArea = false;
 
     public void ResetPan() { _pan = Vector2.zero; }
 
@@ -55,7 +64,7 @@ public class MissionUSEditorWindow : EditorWindow
     {
         GUI.matrix = previousMatrices.Pop();
         GUI.EndGroup();
-        GUI.BeginGroup(new Rect(0, 21, Screen.width, Screen.height));
+        GUI.BeginGroup(new Rect(0, 19, Screen.width, Screen.height));
     }
 
     private bool _enable = true;
@@ -68,8 +77,64 @@ public class MissionUSEditorWindow : EditorWindow
         }
     }
 
+    void DrawTopBar()
+    {
+        GUI.DrawTexture(new Rect(0, 0, Screen.width, TopBarHeight), MUSEditor.BackgroundDark);
+        GUILayout.BeginArea(new Rect(5, 0, Screen.width, TopBarHeight));
+        OnDrawTopBar();
+        GUILayout.EndArea();
+    }
+
+    protected virtual void OnDrawTopBar()
+    {
+
+    }
+
+    void DrawSecondaryBar()
+    {
+        GUI.DrawTexture(new Rect(0, TopBarHeight, Screen.width, SecondaryBarHeight), MUSEditor.SecondaryBar);
+        GUILayout.BeginArea(new Rect(5, TopBarHeight, Screen.width, SecondaryBarHeight));
+        OnDrawSecondaryBar();
+        GUILayout.EndArea();
+    }
+
+    protected virtual void OnDrawSecondaryBar()
+    {
+
+    }
+
+    void DrawMainArea()
+    {
+        float barHeight = 0;
+
+        if (TopBar)
+            barHeight += TopBarHeight;
+        if (TopBar && SecondaryBar)
+            barHeight += SecondaryBarHeight;
+
+        BeginZoom(Zoom, new Rect(0, barHeight - 2 - (Mathf.Max(0, Zoom - 1) * barHeight * 0.4f), Screen.width, Screen.height - barHeight));
+        BeginWindows();
+        GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height - barHeight));
+        OnDrawMainArea();
+        GUILayout.EndArea();
+        EndWindows();
+        EndZoom();
+    }
+
+    protected virtual void OnDrawMainArea()
+    {
+
+    }
+    
+    public void CreateDropdown(int index, List<string> choices, Action<int> callback)
+    {
+        _editorHelper.CreateDropdown(index, choices, callback);
+    }
+
+
     void OnGUI()
     {
+        _editorHelper.Begin();
         bool forceRepaint = false;
         if (Enable)
         {
@@ -88,22 +153,34 @@ public class MissionUSEditorWindow : EditorWindow
                 forceRepaint = true;
             }
         }
-        
 
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), InitEditor.Background);
+        MUSEditor.SetEditorHelper(_editorHelper, Zoom);
 
-        InitEditor.ApplyCustomStyles();
+        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), MUSEditor.Background);
+
+        MUSEditor.ApplyCustomStyles();
         using (new EditorGUI.DisabledScope(!Enable))
         {
+
             OnGUIDraw();
+            if (MainArea)
+                DrawMainArea();
+            if (TopBar)
+                DrawTopBar();
+            if (TopBar && SecondaryBar)
+                DrawSecondaryBar();
         }
 
-        InitEditor.ApplyOrigStyles();
+        _editorHelper.End();
+
+        MUSEditor.ApplyOrigStyles();
+
 
         if (!Enable)
         {
-            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), InitEditor.Mask);
+            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), MUSEditor.Mask);
         }
+        
 
         if (forceRepaint)
         {
@@ -113,12 +190,12 @@ public class MissionUSEditorWindow : EditorWindow
 
     protected void DrawToolbar(Rect rect)
     {
-        GUI.DrawTexture(rect, InitEditor.BackgroundDark);
+        GUI.DrawTexture(rect, MUSEditor.BackgroundDark);
     }
 
     protected void DrawMask()
     {
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), InitEditor.Mask);
+        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), MUSEditor.Mask);
     }
 
     protected virtual void OnGUIDraw()

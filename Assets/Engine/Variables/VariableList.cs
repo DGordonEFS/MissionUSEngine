@@ -5,6 +5,10 @@ using System.Linq;
 [System.Serializable]
 public class VariableList : ISerializationCallbackReceiver
 {
+    //  public enum BoolTypes { TRUE, FALSE };
+
+    public static readonly List<string> BoolTypes = new List<string>() { "False", "True" };
+
     [SerializeField]
     private List<string> _keys;
     [SerializeField]
@@ -54,6 +58,11 @@ public class VariableList : ISerializationCallbackReceiver
         key = key.ToUpper();
         if (_variables.ContainsKey(key))
             _variables.Remove(key);
+    }
+
+    public bool HasKey(string key)
+    {
+        return _variables.ContainsKey(key.ToUpper());
     }
 
     public void SetVariable(string key, string value, VariableData.VariableTypes type = VariableData.VariableTypes.String)

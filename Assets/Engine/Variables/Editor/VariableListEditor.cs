@@ -6,7 +6,6 @@ public class VariableListEditor : MissionUSEditorWindow
 {
     private static VariableList _globalVariables;
 
-    private enum BoolTypes { TRUE, FALSE };
 
     [MenuItem("Mission US/VariableEditor")]
     static void Init()
@@ -14,6 +13,8 @@ public class VariableListEditor : MissionUSEditorWindow
         var window = EditorWindow.GetWindow<VariableListEditor>();
         window.titleContent = new GUIContent("Variable Editor");
         window.Show();
+        window.TopBar = true;
+        window.MainArea = true;
 
         var so = Resources.Load<VariableListSO>("GlobalVariables");
         if (so != null)
@@ -40,8 +41,10 @@ public class VariableListEditor : MissionUSEditorWindow
     {
     }
 
-    protected override void OnGUIDraw()
+    protected override void OnDrawMainArea()
     {
+        GUILayout.BeginArea(new Rect(5, 0, Screen.width - 10, Screen.height));
+        GUILayout.Space(5);
         var variables = _globalVariables;
 
         if (Application.isPlaying)
@@ -86,9 +89,11 @@ public class VariableListEditor : MissionUSEditorWindow
                     newValue = EditorGUILayout.IntField(int.Parse(value)).ToString();
                     break;
                 case VariableData.VariableTypes.Bool:
-                    var boolType = bool.Parse(value) ? BoolTypes.TRUE : BoolTypes.FALSE;
-                    boolType = (BoolTypes) EditorGUILayout.EnumPopup(boolType);
-                    newValue = (boolType == BoolTypes.TRUE).ToString().ToLower();
+                    newValue = value;
+                    MUSEditor.EditorHelper.CreateDropdown(bool.Parse(value) ? 1 : 0, VariableList.BoolTypes, (val) => {
+                        if (variables.HasKey(key))
+                            variables.SetVariable(newKey, (val == 1).ToString(), VariableData.VariableTypes.Bool);
+                    }, 105);
                     break;
             }
 
@@ -101,11 +106,15 @@ public class VariableListEditor : MissionUSEditorWindow
                 variables.SetVariable(newKey, newValue, (VariableData.VariableTypes)newType);
 
             EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(2);
         }
 
         if (GUILayout.Button("Add Variable"))
         {
             variables.SetVariable("", "");
         }
+
+        GUILayout.EndArea();
     }
 }
