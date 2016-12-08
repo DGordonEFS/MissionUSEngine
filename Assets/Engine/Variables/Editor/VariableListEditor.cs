@@ -2,7 +2,12 @@
 using UnityEditor;
 using System.Collections.Generic;
 
-public class VariableListEditor : MissionUSEditorWindow
+public class VariableEditorPage : EditorPage
+{
+
+}
+
+public class VariableListEditor : MissionUSEditorWindow<VariableEditorPage>
 {
     private static VariableList _globalVariables;
 

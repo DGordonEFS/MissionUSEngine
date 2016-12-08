@@ -9,10 +9,6 @@ using LitJson;
 
 namespace DarkChariotStudios.Dialogs
 {
-    [Serializable]
-    public class NodeDictionary : SerialiazableDictionary<string, DialogNode> { }
-
-    [System.Serializable]
     public class Dialog
     {
         public delegate void DialogNodeEventHandler(DialogNode node);
@@ -27,7 +23,7 @@ namespace DarkChariotStudios.Dialogs
 
         
         [JsonInclude]
-        private NodeDictionary _nodes = new NodeDictionary();
+        private Dictionary<string, DialogNode> _nodes = new Dictionary<string, DialogNode>();
 
         [JsonIgnore]
         public int NumNodes { get { return _nodes.Count; } }
@@ -293,6 +289,10 @@ namespace DarkChariotStudios.Dialogs
         
         public int Index { get; private set; }
 
+        
+        public Script ActionScript = new Script();
+        public Script ConditionScript = new Script();
+
         [JsonIgnore]
         public Func<bool> Condition { get; private set; }
 
@@ -362,6 +362,11 @@ namespace DarkChariotStudios.Dialogs
         public bool EditorDrawLine;
 
         public string Text { get; set; }
+        
+        public Script ActionScript = new Script();
+        public Script ConditionScript = new Script();
+        public Script DisableScript = new Script();
+        public Script NextNodeScript = new Script();
 
         public enum NextNodeTypes { Id, End, Script };
         public NextNodeTypes NextNodeType;

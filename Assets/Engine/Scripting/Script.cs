@@ -3,32 +3,42 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using LitJson;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-[System.Serializable]
+
 public class Script
 {
+    [JsonIgnore]
     public static VariableList GlobalVariables;
-    public static Dictionary<string, Type> BlockTypes;
-    public static Dictionary<Type, string> BlockIdLookup;
+    [JsonIgnore]
+    public static Dictionary<string, string> BlockTypes;
+    [JsonIgnore]
+    public static Dictionary<string, string> BlockIdLookup;
+    [JsonIgnore]
     public static Dictionary<string, string> BlockGroupLookup;
+    [JsonIgnore]
     public static List<string> BlockIds;
-
-    [HideInInspector]
-    [SerializeField]
+    
+    [JsonInclude]
     private List<ScriptBlock> _blocks = new List<ScriptBlock>();
+    [JsonIgnore]
     public List<ScriptBlock> Blocks { get { return _blocks; } }
+
     public ScriptBlock GetBlockAt(int index)
     {
         return _blocks[index];
     }
 
 
+    [JsonIgnore]
     public int NumBlocks { get { return _blocks.Count; } }
 
+    [JsonIgnore]
     public string ReturnValue { get; private set; }
+    [JsonIgnore]
     public bool IsRunning { get; private set; }
 
     public void ApplyReturn(string value)
@@ -48,11 +58,12 @@ public class Script
     }
 }
 
-[System.Serializable]
-public class ScriptBlock
+public abstract class ScriptBlock
 {
+    [JsonIgnore]
     public bool Used;
-
+ 
+    [JsonIgnore]
     public Vector2 EditorSize = new Vector2(400, 60);
 
     public enum BlockingTypes { No, Yes, Optional }
@@ -71,13 +82,20 @@ public class ScriptBlock
     }
 
 #if UNITY_EDITOR
+    [JsonIgnore]
     public bool IsDisposed;
+    [JsonIgnore]
     public List<ScriptBlock> OwnerBlocks;
     
     public void OnGUI(ScriptBlock prevBlock)
     {
         GUILayout.Space(2);
 
+       // Debug.Log("count: " + GetType());
+       // Debug.Log("id count: " + Script.BlockIdLookup.Count);
+        //foreach (var id in Script.BlockIdLookup.Keys)
+           // Debug.Log("   - " + id);
+        //Debug.Log("id from type: " + Script.BlockIdLookup[GetType().Name]);
 
         var ids = Script.BlockIds.ToList();
 
@@ -89,7 +107,7 @@ public class ScriptBlock
             ids.Remove("Else");
         }
 
-        var selectedType = Script.BlockIdLookup[GetType()];
+        var selectedType = Script.BlockIdLookup[GetType().Name];
         var index = ids.IndexOf(selectedType);
         if (index == -1)
             index = 0;
@@ -103,7 +121,7 @@ public class ScriptBlock
             {
                 int selfIndex = OwnerBlocks.IndexOf(this);
                 OwnerBlocks.RemoveAt(selfIndex);
-                OwnerBlocks.Insert(selfIndex, (ScriptBlock)Script.BlockTypes[newType].GetConstructor(new Type[0]).Invoke(new object[0]));
+                OwnerBlocks.Insert(selfIndex, (ScriptBlock)Type.GetType(Script.BlockTypes[newType]).GetConstructor(new Type[0]).Invoke(new object[0]));
             }
         }, GUILayout.Width(200));
 
@@ -154,13 +172,11 @@ public class ScriptBlock
 #endif
 }
 
-[System.Serializable]
 public class ScriptAction : ScriptBlock
 {
 }
 
 
-[System.Serializable]
 public class ScriptCondition : ScriptBlock
 {
     public string Evaluate(Script script)
@@ -175,7 +191,6 @@ public class ScriptCondition : ScriptBlock
 }
 
 [ScriptActionData(Group="Flow", Id = "Wait")]
-[System.Serializable]
 public class ScriptWaitAction : ScriptAction
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.Yes; } }
@@ -210,7 +225,6 @@ public class ScriptHotspotAction : ScriptAction
 }
 
 [ScriptActionData(Group="Hotspots", Id = "Fade")]
-[System.Serializable]
 public class ScriptHotspotFadeAction : ScriptHotspotAction
 {
     public float Alpha;
@@ -232,7 +246,6 @@ public class ScriptHotspotFadeAction : ScriptHotspotAction
 }
 
 [ScriptActionData(Group = "Hotspots", Id = "Visible")]
-[System.Serializable]
 public class ScriptHotspotVisibleAction : ScriptHotspotAction
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.No; } }
@@ -254,38 +267,18 @@ public class ScriptHotspotVisibleAction : ScriptHotspotAction
 }
 
 [ScriptActionData(Group="Flow", Id = "Return")]
-[System.Serializable]
 public class ScriptReturnAction : ScriptAction
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.No; } }
-
-    public enum ValueTypes { None, GlobalVariable, Condition };
-    public ValueTypes ValueType;
-    public object Value;
-
+    
     protected override IEnumerator OnExecute(Script script)
     {
-        string value = null;
-        switch (ValueType)
-        {
-            case ValueTypes.None:
-                value = Value.ToString();
-                break;
-            case ValueTypes.GlobalVariable:
-                value = GlobalVariables.GetInstance().GetVariable(Value.ToString());
-                break;
-            case ValueTypes.Condition:
-                value = ((ScriptCondition)Value).Evaluate(script);
-                break;
-        }
-
-        script.ApplyReturn(value);
+        script.ApplyReturn(null);
         yield return null;
     }
 }
 
 [ScriptActionData(Group = "Variables", Id = "SetVariable")]
-[System.Serializable]
 public class ScriptSetVariableAction : ScriptAction
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.No; } }
@@ -344,7 +337,6 @@ public class ScriptSetVariableAction : ScriptAction
 }
 
 [ScriptActionData(Group = "Variables", Id = "SetVariableUser")]
-[System.Serializable]
 public class ScriptSetVariableUserAction : ScriptAction
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.No; } }
@@ -423,13 +415,14 @@ public class ScriptSetVariableUserAction : ScriptAction
 
 public abstract class ScriptContainer : ScriptAction
 {
+    [JsonIgnore]
     public bool Folded;
+    [JsonIgnore]
     public bool Entered;
     public ScriptIfThen Contents = new ScriptIfThen();
 }
 
 [ScriptActionData(Group="Flow", Id = "If")]
-[System.Serializable]
 public class ScriptIfThenContainer : ScriptContainer
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.Yes; } }
@@ -443,7 +436,6 @@ public class ScriptIfThenContainer : ScriptContainer
 }
 
 [ScriptActionData(Group = "Flow", Id = "ElseIf")]
-[System.Serializable]
 public class ScriptElseIfThenContainer : ScriptContainer
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.Yes; } }
@@ -456,7 +448,6 @@ public class ScriptElseIfThenContainer : ScriptContainer
 }
 
 [ScriptActionData(Group = "Flow", Id = "Else")]
-[System.Serializable]
 public class ScriptElseThenContainer : ScriptContainer
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.Yes; } }
@@ -477,7 +468,6 @@ public class ScriptIfThen
 }
 
 [ScriptActionData(Id = "While")]
-[System.Serializable]
 public class ScriptWhileContainer : ScriptContainer
 {
     public override BlockingTypes BlockingType { get { return BlockingTypes.Yes; } }

@@ -10,27 +10,26 @@ using LitJson;
 
 using System.Linq;
 
-public class DrawHandleData
-{
-    public Vector2 from;
-    public int fromDir = 1;
-    public Vector2 to;
-    public int toDir = -1;
-}
-
 public class ConnectionData
 {
     public string From;
     public string To;
 }
 
-public class DialogEditorPage
+public class DialogEditorPage : EditorPage
 {
+    public override string Title
+    {
+        get
+        {
+            return Dialog.Id;
+        }
+    }
     public Dialog Dialog = new Dialog() { Id = "Untitled" };
     public List<DialogNode> Nodes;
 }
 
-public class DialogEditor : MissionUSEditorWindow
+public class DialogEditor : MissionUSEditorWindow<DialogEditorPage>
 {
     public static DialogEditor Instance { get; private set; }
 
@@ -41,16 +40,12 @@ public class DialogEditor : MissionUSEditorWindow
 
     private List<DialogNode> Nodes { get { return CurrentPage != null ? CurrentPage.Nodes : null; } set { if (CurrentPage == null) return; CurrentPage.Nodes = value; } }
 
-    public int CurrentPageIndex { get; private set; }
-    public List <DialogEditorPage> Pages { get; private set; }
-    public DialogEditorPage CurrentPage { get { return Pages != null && CurrentPageIndex >= 0 && CurrentPageIndex < Pages.Count ? Pages[CurrentPageIndex] : null; } }
+    
 
 
 
     private bool _saveAs;
     private string _saveAsId;
-
-    private Dictionary<DialogResponse, DrawHandleData> _handles = new Dictionary<DialogResponse, DrawHandleData>();
 
     [MenuItem("Mission US/Data/DialogEditor")]
     static void Init()
@@ -65,7 +60,6 @@ public class DialogEditor : MissionUSEditorWindow
         window.TopBar = true;
         window.SecondaryBar = true;
         window.MainArea = true;
-        window.Pages = new List<DialogEditorPage>();
         window.Pages.Add(new DialogEditorPage());
     }
 
@@ -271,33 +265,7 @@ public class DialogEditor : MissionUSEditorWindow
 
     protected override void OnDrawSecondaryBar()
     {
-        if (Pages == null)
-            return;
-
-        GUILayout.Space(15);
-        EditorGUILayout.BeginHorizontal();
-        for (int i = 0; i < Pages.Count; i++)
-        {
-            var page = Pages[i];
-
-            if (CurrentPage == page)
-            {
-                GUIStyle style = "selectedtab";
-                if (MUSEditor.EditorHelper.Button(page.Dialog.Id, style))
-                {
-                    CurrentPageIndex = i;
-                }
-            }
-            else
-            {
-                GUIStyle style = "tab";
-                if (MUSEditor.EditorHelper.Button(page.Dialog.Id, style))
-                {
-                    CurrentPageIndex = i;
-                }
-            }
-        }
-        EditorGUILayout.EndHorizontal();
+        DrawPageTabs();
     }
 
     public string GetPath()
@@ -316,6 +284,7 @@ public class DialogEditor : MissionUSEditorWindow
     public void Load(string dialogId)
     {
         var text = Resources.Load<TextAsset>(dialogId).text;
+        Debug.Log(text);
         var page = new DialogEditorPage();
         page.Dialog = JsonMapper.ToObject<Dialog>(text);
         Pages.Add(page);
@@ -324,7 +293,13 @@ public class DialogEditor : MissionUSEditorWindow
 
     public void Save(string path)
     {
-        var data = JsonMapper.ToJson(Dialog);
+        var sb = new System.Text.StringBuilder();
+        var writer = new JsonWriter(sb);
+        writer.TypeHinting = true;
+        JsonMapper.ToJson(Dialog, writer);
+
+        var data = sb.ToString();
+        Debug.Log(data);
         Debug.Log("save to: " + path);
         var sr = File.CreateText(path);
         sr.Write(data);
@@ -395,9 +370,11 @@ public class DialogEditor : MissionUSEditorWindow
                     prompt.Npc = npcs[EditorGUILayout.Popup(indexOfId, npcs.ToArray(), GUILayout.Width(50))];
                     if (MUSEditor.EditorHelper.Button("A"))
                     {
+                        ScriptEditor.GetInstance().AddPage(new ScriptEditorPage() { Group=Dialog.Id, Script = prompt.ActionScript, Id = "Dlg: " + Dialog.Id + "_" + node.Id + "_p" + i + "_action" });
                     }
                     if (MUSEditor.EditorHelper.Button("C"))
                     {
+                        ScriptEditor.GetInstance().AddPage(new ScriptEditorPage() { Group = Dialog.Id, Script = prompt.ConditionScript, Id = "Dlg: " + Dialog.Id + "_" + node.Id + "_p" + i + "_condition" });
                     }
                     if (MUSEditor.EditorHelper.Button("X"))
                     {
@@ -446,17 +423,21 @@ public class DialogEditor : MissionUSEditorWindow
                         response.NextNodeId = null;
                         if (MUSEditor.EditorHelper.Button("N"))
                         {
+                            ScriptEditor.GetInstance().AddPage(new ScriptEditorPage() { Group = Dialog.Id, Script = response.NextNodeScript, Id = "Dlg: " + Dialog.Id + "_" + node.Id + "_r" + i + "_nextnode" });
                         }
                         break;
                 }
                 if (MUSEditor.EditorHelper.Button("D"))
                 {
+                    ScriptEditor.GetInstance().AddPage(new ScriptEditorPage() { Group = Dialog.Id, Script = response.DisableScript, Id = "Dlg: " + Dialog.Id + "_" + node.Id + "_r" + i + "_disable" });
                 }
                 if (MUSEditor.EditorHelper.Button("A"))
                 {
+                    ScriptEditor.GetInstance().AddPage(new ScriptEditorPage() { Group = Dialog.Id, Script = response.ActionScript, Id = "Dlg: " + Dialog.Id + "_" + node.Id + "_r" + i + "_action" });
                 }
                 if (MUSEditor.EditorHelper.Button("C"))
                 {
+                    ScriptEditor.GetInstance().AddPage(new ScriptEditorPage() { Group = Dialog.Id, Script = response.ConditionScript, Id = "Dlg: " + Dialog.Id + "_" + node.Id + "_r" + i + "_condition" });
                 }
                 if (MUSEditor.EditorHelper.Button("X"))
                 {
@@ -588,7 +569,7 @@ public class DialogEditor : MissionUSEditorWindow
     
 }
 
-public class DialogSaveAsPopup : MissionUSEditorWindow
+public class DialogSaveAsPopup : MissionUSEditorWindow<EditorPage>
 {
     public static DialogSaveAsPopup Init(DialogEditor launcher)
     {

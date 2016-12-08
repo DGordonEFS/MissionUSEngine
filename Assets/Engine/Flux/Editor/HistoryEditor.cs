@@ -6,14 +6,14 @@ using System.Collections.Generic;
 
 using DarkChariotStudios.Dialogs;
 
-public class FluxEditor : MissionUSEditorWindow
+public class HistoryEditor : MissionUSEditorWindow<EditorPage>
 {
 
 
     [MenuItem("Mission US/Debug/History View")]
     static void Init()
     {
-        var window = EditorWindow.GetWindow<FluxEditor>();
+        var window = EditorWindow.GetWindow<HistoryEditor>();
         window.titleContent = new GUIContent("History View");
         window.Show();
         

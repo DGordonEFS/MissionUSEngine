@@ -4,8 +4,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public abstract class EditorPage
+{
+    public string Group;
+    public virtual string Title { get { return null; } }
+}
 
-public class MissionUSEditorWindow : EditorWindow
+public class MissionUSEditorWindow<TPage> : EditorWindow where TPage : EditorPage
 {
     private MissionUSEditorHelper _editorHelper = new MissionUSEditorHelper();
 
@@ -17,6 +22,58 @@ public class MissionUSEditorWindow : EditorWindow
     public bool TopBar = false;
     public bool SecondaryBar = false;
     public bool MainArea = false;
+
+    public bool ExclusivePages;
+    public string PageGroup;
+    public int CurrentPageIndex { get; set; }
+    public List<TPage> Pages { get; set; }
+    public TPage CurrentPage { get { return Pages != null && CurrentPageIndex >= 0 && CurrentPageIndex < Pages.Count ? Pages[CurrentPageIndex] : null; } }
+
+    public void AddPage(TPage page)
+    {
+        if (ExclusivePages)
+            Pages.Clear();
+        Pages.Add(page);
+        CurrentPageIndex = Pages.Count - 1;
+        Repaint();
+    }
+
+    public MissionUSEditorWindow()
+    {
+        Pages = new List<TPage>();
+        Repaint();
+    }
+
+    protected void DrawPageTabs()
+    {
+        if (CurrentPage == null)
+            return;
+
+        GUILayout.Space(15);
+        EditorGUILayout.BeginHorizontal();
+        for (int i = 0; i < Pages.Count; i++)
+        {
+            var page = Pages[i];
+
+            if (CurrentPage == page)
+            {
+                GUIStyle style = "selectedtab";
+                if (MUSEditor.EditorHelper.Button(Pages[i].Title, style))
+                {
+                    CurrentPageIndex = i;
+                }
+            }
+            else
+            {
+                GUIStyle style = "tab";
+                if (MUSEditor.EditorHelper.Button(Pages[i].Title, style))
+                {
+                    CurrentPageIndex = i;
+                }
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+    }
 
     public void ResetPan() { _pan = Vector2.zero; }
 

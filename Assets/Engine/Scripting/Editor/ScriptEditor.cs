@@ -6,13 +6,39 @@ using System.Collections.Generic;
 
 using DarkChariotStudios.Dialogs;
 
-public class ScriptEditor : MissionUSEditorWindow
+public class ScriptEditorPage : EditorPage
+{
+    public override string Title
+    {
+        get
+        {
+            return Id;
+        }
+    }
+
+    public string Id;
+    public Script Script;
+
+
+    public void Close()
+    {
+        ScriptEditor.GetInstance().Pages.Remove(this);
+    }
+}
+
+public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
 {
 
-    public static ScriptEditor Instance { get; private set; }
+    private static ScriptEditor _instance;
+    public static ScriptEditor GetInstance()
+    {
+        if (_instance == null)
+            Init();
+        return _instance;
+    }
 
     private float _sideBarWidth = 300;
-    public Script Script { get; set; }
+   // public Script Script { get; set; }
     
     private Vector2 _scrollPos;
 
@@ -20,11 +46,11 @@ public class ScriptEditor : MissionUSEditorWindow
     private int _count;
 
     private const float COL_WIDTH = 200;
-    
+
     [MenuItem("Mission US/Data/ScriptEditor")]
     static void Init()
     {
-        if (Instance != null)
+        if (_instance != null)
             return;
 
         var window = EditorWindow.GetWindow<ScriptEditor>();
@@ -37,11 +63,17 @@ public class ScriptEditor : MissionUSEditorWindow
         var so = Resources.Load<VariableListSO>("GlobalVariables");
         Script.GlobalVariables = so.Variables;
 
-        window.Script = new Script();
         window.CanZoom = true;
         window.CanPan = true;
         window.TopBar = true;
-        Instance = window;
+        window.SecondaryBar = true;
+        window.ExclusivePages = true;
+        _instance = window;
+    }
+
+    protected override void OnDrawSecondaryBar()
+    {
+        DrawPageTabs();
     }
 
     [UnityEditor.Callbacks.DidReloadScripts]
@@ -58,16 +90,16 @@ public class ScriptEditor : MissionUSEditorWindow
             select new { Type = t, Attributes = attributes.Cast<ScriptActionData>() };
 
        // Debug.Log("num types with attribute: " + typesWithMyAttribute.Count());
-        Script.BlockTypes = new Dictionary<string, Type>();
-        Script.BlockIdLookup = new Dictionary<Type, string>();
+        Script.BlockTypes = new Dictionary<string, string>();
+        Script.BlockIdLookup = new Dictionary<string, string>();
         Script.BlockGroupLookup = new Dictionary<string, string>();
         foreach (var type in typesWithMyAttribute)
         {
             foreach (var attribute in type.Attributes)
             {
-               // Debug.Log("att: " + attribute.Id + ", type: " + type.Type);
-                Script.BlockTypes.Add(attribute.Id, type.Type);
-                Script.BlockIdLookup.Add(type.Type, attribute.Id);
+                Debug.Log("att: " + attribute.Id + ", type: " + type.Type);
+                Script.BlockTypes.Add(attribute.Id, type.Type.Name);
+                Script.BlockIdLookup.Add(type.Type.Name, attribute.Id);
                 Script.BlockGroupLookup.Add(attribute.Id, attribute.Group);
             }
         }
@@ -76,19 +108,19 @@ public class ScriptEditor : MissionUSEditorWindow
 
     void OnDestroy()
     {
-        Instance = null;
+        _instance = null;
     }
 
     protected override void OnGUIDraw()
     {
-        if (Script == null)
+        if (CurrentPage == null)
             return;
 
         _count = 0;
 
         BeginZoom(Zoom, new Rect(0, 0, Screen.width, Screen.height));
         BeginWindows();
-        DrawColumn(Script.Blocks, 0, 100);
+        DrawColumn(CurrentPage.Script.Blocks, 0, 100);
         EndWindows();
         EndZoom();
     }
