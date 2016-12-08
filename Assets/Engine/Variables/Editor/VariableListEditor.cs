@@ -93,7 +93,7 @@ public class VariableListEditor : MissionUSEditorWindow
                     MUSEditor.EditorHelper.CreateDropdown(bool.Parse(value) ? 1 : 0, VariableList.BoolTypes, (val) => {
                         if (variables.HasKey(key))
                             variables.SetVariable(newKey, (val == 1).ToString(), VariableData.VariableTypes.Bool);
-                    }, 105);
+                    }, GUILayout.Width(105));
                     break;
             }
 

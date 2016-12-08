@@ -25,12 +25,12 @@ public class MissionUSEditorHelper
             _menuToShow.ShowAsContext();
     }
 
-    public void CreateDropdown(int index, List<string> choices, Action<int> callback, float width = -1)
+    public void CreateDropdown(int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
     {
-        CreateDropdown(null, index, choices, callback, width);
+        CreateDropdown(null, index, choices, callback, option);
     }
 
-    public void CreateDropdown(string label, int index, List<string> choices, Action<int> callback, float width = -1)
+    public void CreateDropdown(string label, int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
     {
         if (choices.Count == 0)
             return;
@@ -45,23 +45,25 @@ public class MissionUSEditorHelper
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel(label);
         }
-
-        GUILayoutOption layout = null;
-
-        if (width > -1)
-            layout = GUILayout.Width(width);
-        else
-            layout = GUILayout.ExpandWidth(false);
-
+        
         GUIStyle style = "minipopup";
-        if (GUILayout.Button(choices[index], style, layout))
+        bool wasClicked = false;
+
+        
+
+        if (option == null && GUILayout.Button(choices[index], style))
+            wasClicked = true;
+        else if (option != null && GUILayout.Button(choices[index], style, option))
+            wasClicked = true;
+
+        if (wasClicked)
         {
             var menu = new GenericMenu();
             for (int i = 0; i < choices.Count; i++)
             {
                 menu.AddItem(new GUIContent(choices[i]), false, func, i);
             }
-            
+
             _menuToShow = menu;
         }
 

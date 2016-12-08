@@ -95,7 +95,17 @@ public class ScriptBlock
             index = 0;
 
         EditorGUILayout.BeginHorizontal();
-        var newType = ids[UnityEditor.EditorGUILayout.Popup(index, ids.ConvertAll((x)=>Script.BlockGroupLookup[x] + "/" + x).ToArray(), GUILayout.Width(200))];
+
+        MUSEditor.EditorHelper.CreateDropdown(index, ids.ConvertAll((x) => Script.BlockGroupLookup[x] + "/" + x), (value) =>
+        {
+            var newType = ids[value];
+            if (newType != selectedType)
+            {
+                int selfIndex = OwnerBlocks.IndexOf(this);
+                OwnerBlocks.RemoveAt(selfIndex);
+                OwnerBlocks.Insert(selfIndex, (ScriptBlock)Script.BlockTypes[newType].GetConstructor(new Type[0]).Invoke(new object[0]));
+            }
+        }, GUILayout.Width(200));
 
         var offset = 0;
         if (this is ScriptContainer)
@@ -127,16 +137,12 @@ public class ScriptBlock
         }
         EditorGUILayout.EndHorizontal();
 
-        if (newType != selectedType)
-        {
-            int selfIndex = OwnerBlocks.IndexOf(this);
-            OwnerBlocks.RemoveAt(selfIndex);
-            OwnerBlocks.Insert(selfIndex, (ScriptBlock) Script.BlockTypes[newType].GetConstructor(new Type[0]).Invoke(new object[0]));
-        }
+        
         GUILayout.Space(7);
 
         OnGUIDraw(prevBlock);
 
+        GUILayout.Space(7);
         if (BlockingType == BlockingTypes.Optional)
         {
             MUSEditor.EditorHelper.CreateDropdown("IsBlocking:", IsBlocking ? 1 : 0, VariableList.BoolTypes, (value) => IsBlocking = value == 1);
@@ -302,22 +308,31 @@ public class ScriptSetVariableAction : ScriptAction
         var group = "Global";
 
         int index = Mathf.Max(0, keys.IndexOf(VariableId)); // clamp to 0
-        var newIndex = EditorGUILayout.Popup(index, keys.ConvertAll((x)=>group + "/" + x).ToArray(), GUILayout.Width(150));
-        VariableId = keys[newIndex];
+        VariableId = keys[index];
+        MUSEditor.EditorHelper.CreateDropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
+        {
+            if (value != index)
+                Value = null;
 
-        if (index != newIndex)
-            Value = null;
+            VariableId = keys[value];
+        }, GUILayout.Width(150));
+      
 
         EditorGUILayout.LabelField("=", GUILayout.Width(15));
         
+
         var type = variableList.GetType(VariableId);
 
         group = "Global";
 
-        keys = variableList.GetKeys().FindAll((x) => Script.GlobalVariables.GetType(x) == type && x != VariableId); // only accept variables of the same type
-        index = Mathf.Max(0, keys.IndexOf(Value)); // clamp to 0
-        newIndex = EditorGUILayout.Popup(index, keys.ConvertAll((x)=>group + "/" + x).ToArray(), GUILayout.Width(150));
-        Value = keys[newIndex];
+        var valueKeys = variableList.GetKeys().FindAll((x) => Script.GlobalVariables.GetType(x) == type && x != VariableId); // only accept variables of the same type
+        var valueIndex = Mathf.Max(0, valueKeys.IndexOf(Value)); // clamp to 0
+
+        MUSEditor.EditorHelper.CreateDropdown(valueIndex, valueKeys.ConvertAll((x) => group + "/" + x), (value) =>
+        {
+            Value = valueKeys[value];
+        }, GUILayout.Width(150));
+        
         EditorGUILayout.EndHorizontal();
     }
 #endif
@@ -351,13 +366,29 @@ public class ScriptSetVariableUserAction : ScriptAction
 
         var group = "Global";
 
-        int index = Mathf.Max(0, keys.IndexOf(VariableId)); // clamp to 0
-        var newIndex = EditorGUILayout.Popup(index, keys.ConvertAll((x)=>group + "/" + x).ToArray(), GUILayout.Width(150));
-        //Debug.Log("index: " + index + ", newIndex: " + newIndex + ", total: " + keys.Count);
-        VariableId = keys[newIndex];
 
-        if (index != newIndex)
-            Value = null;
+        int index = Mathf.Max(0, keys.IndexOf(VariableId)); // clamp to 0
+        VariableId = keys[index];
+        MUSEditor.EditorHelper.CreateDropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
+        {
+            VariableId = keys[value];
+
+            if (value != index)
+            {
+                switch (variableList.GetType(VariableId))
+                {
+                    case VariableData.VariableTypes.String:
+                        Value = "";
+                        break;
+                    case VariableData.VariableTypes.Number:
+                        Value = "0";
+                        break;
+                    case VariableData.VariableTypes.Bool:
+                        Value = "false";
+                        break;
+                }
+            }
+        }, GUILayout.Width(150));
 
         EditorGUILayout.LabelField("=", GUILayout.Width(15));
 
@@ -372,6 +403,12 @@ public class ScriptSetVariableUserAction : ScriptAction
                 if (Value == null)
                     Value = "0";
                 Value = EditorGUILayout.FloatField(float.Parse(Value)).ToString();
+                break;
+            case VariableData.VariableTypes.Bool:
+                MUSEditor.EditorHelper.CreateDropdown(bool.Parse(Value != null ? Value : "false") ? 1 : 0, VariableList.BoolTypes, (value) =>
+                {
+                    Value = (value == 1).ToString();
+                }, GUILayout.Width(150));
                 break;
         }
         EditorGUILayout.EndHorizontal();
