@@ -18178,8 +18178,8 @@ MonoBehaviour:
     m_Padding:
       m_Left: 10
       m_Right: 10
-      m_Top: 2
-      m_Bottom: 12
+      m_Top: -2
+      m_Bottom: 8
     m_Overflow:
       m_Left: 0
       m_Right: 0
@@ -18196,7 +18196,7 @@ MonoBehaviour:
     m_ContentOffset: {x: 0, y: 0}
     m_FixedWidth: 0
     m_FixedHeight: 22
-    m_StretchWidth: 1
+    m_StretchWidth: 0
     m_StretchHeight: 0
   - m_Name: MiniPullDown
     m_Normal:

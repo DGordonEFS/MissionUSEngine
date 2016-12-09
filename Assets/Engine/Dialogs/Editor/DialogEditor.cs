@@ -284,9 +284,10 @@ public class DialogEditor : MissionUSEditorWindow<DialogEditorPage>
     public void Load(string dialogId)
     {
         var text = Resources.Load<TextAsset>(dialogId).text;
-        Debug.Log(text);
         var page = new DialogEditorPage();
-        page.Dialog = JsonMapper.ToObject<Dialog>(text);
+        var reader = new JsonReader(text);
+        reader.TypeHinting = true;
+        page.Dialog = JsonMapper.ToObject<Dialog>(reader);
         Pages.Add(page);
         CurrentPageIndex = Pages.Count - 1;
     }
@@ -299,8 +300,6 @@ public class DialogEditor : MissionUSEditorWindow<DialogEditorPage>
         JsonMapper.ToJson(Dialog, writer);
 
         var data = sb.ToString();
-        Debug.Log(data);
-        Debug.Log("save to: " + path);
         var sr = File.CreateText(path);
         sr.Write(data);
         sr.Close();

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.IO;
 using System.Collections.Generic;
 
 public class VariableEditorPage : EditorPage
@@ -9,9 +10,6 @@ public class VariableEditorPage : EditorPage
 
 public class VariableListEditor : MissionUSEditorWindow<VariableEditorPage>
 {
-    private static VariableList _globalVariables;
-
-
     [MenuItem("Mission US/Data/VariableEditor")]
     static void Init()
     {
@@ -21,25 +19,29 @@ public class VariableListEditor : MissionUSEditorWindow<VariableEditorPage>
         window.TopBar = true;
         window.MainArea = true;
 
-        var so = Resources.Load<VariableListSO>("GlobalVariables");
-        if (so != null)
-            _globalVariables = so.Variables;
-        else
-        { 
-            _globalVariables = new VariableList();
-            so = ScriptableObject.CreateInstance<VariableListSO>();
-            so.Variables = _globalVariables;
-            Debug.Log("new global variables");
-            AssetDatabase.CreateAsset(so, "Assets/Engine/Data/Resources/GlobalVariables.asset");
-        }
+        OnScriptsReloaded();
     }
+
+    
 
     [UnityEditor.Callbacks.DidReloadScripts]
     private static void OnScriptsReloaded()
     {
-        var so = Resources.Load<VariableListSO>("GlobalVariables");
-        if (so != null)
-            _globalVariables = so.Variables;
+    }
+
+    protected override void OnDrawTopBar()
+    {
+        GUILayout.Space(5);
+        EditorGUILayout.BeginHorizontal();
+        if (MUSEditor.EditorHelper.Button("Save"))
+        {
+            GlobalVariables.Save();
+        }
+        if (MUSEditor.EditorHelper.Button("Refresh"))
+        {
+            GlobalVariables.Refresh();
+        }
+        EditorGUILayout.EndHorizontal();
     }
 
     void OnDestroy()
@@ -50,10 +52,8 @@ public class VariableListEditor : MissionUSEditorWindow<VariableEditorPage>
     {
         GUILayout.BeginArea(new Rect(5, 0, Screen.width - 10, Screen.height));
         GUILayout.Space(5);
-        var variables = _globalVariables;
-
-        if (Application.isPlaying)
-            variables = GlobalVariables.GetInstance();
+        var variables = GlobalVariables.GetInstance();
+        
 
         var keys = variables.GetKeys();
         for (int i = 0; i < keys.Count; i++)

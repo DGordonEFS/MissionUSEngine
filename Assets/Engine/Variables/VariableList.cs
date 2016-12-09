@@ -1,31 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using LitJson;
 
-[System.Serializable]
-public class VariableList : ISerializationCallbackReceiver
+using System.IO;
+
+public class VariableList
 {
-    //  public enum BoolTypes { TRUE, FALSE };
-
     public static readonly List<string> BoolTypes = new List<string>() { "False", "True" };
-
-    [SerializeField]
-    private List<string> _keys;
-    [SerializeField]
-    private List<VariableData> _values;
-
-    public void OnBeforeSerialize()
-    {
-        _keys = _variables.Keys.ToList();
-        _values = _variables.Values.ToList();
-    }
-
-    public void OnAfterDeserialize()
-    {
-        for (int i = 0; i < _keys.Count; i++)
-            _variables.Add(_keys[i], _values[i]);
-    }
-
+    
     public VariableList Clone()
     {
         VariableList clone = new VariableList();
@@ -41,15 +24,16 @@ public class VariableList : ISerializationCallbackReceiver
 
     public string Serialize()
     {
-        return LitJson.JsonMapper.ToJson(_variables);
+        return JsonMapper.ToJson(_variables);
     }
 
     public void Deserialize(string data)
     {
-        _variables = LitJson.JsonMapper.ToObject<Dictionary<string, VariableData>>(data);
+        _variables = JsonMapper.ToObject<Dictionary<string, VariableData>>(data);
     }
 
-    public Dictionary<string, VariableData> _variables = new Dictionary<string, VariableData>();
+    [JsonInclude]
+    private Dictionary<string, VariableData> _variables = new Dictionary<string, VariableData>();
 
     public List<string> GetKeys() { return _variables.Keys.ToList(); }
 
@@ -145,8 +129,34 @@ public static class GlobalVariables
     public static VariableList GetInstance()
     {
         if (_variables == null)
-            _variables = Resources.Load<VariableListSO>("GlobalVariables").Variables.Clone();
+        {
+            Refresh();
+        }
+        
         return _variables;
+    }
+
+    public const string PATH = "Assets/Engine/Data/Variables/Resources/";
+
+    public static void Refresh()
+    {
+        if (_variables == null)
+            _variables = new VariableList();
+
+        var textAsset = Resources.Load<TextAsset>("GlobalVariables");
+        if (textAsset == null)
+        {
+            Save();
+        }
+        var text = textAsset.text;
+        _variables.Deserialize(text);
+    }
+
+    public static void Save()
+    {
+        var sr = File.CreateText(PATH + "GlobalVariables.txt");
+        sr.Write(_variables.Serialize());
+        sr.Close();
     }
 }
 

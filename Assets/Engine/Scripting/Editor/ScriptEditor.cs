@@ -58,11 +58,7 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
         window.Show();
 
         OnScriptsReloaded();
-
-
-        var so = Resources.Load<VariableListSO>("GlobalVariables");
-        Script.GlobalVariables = so.Variables;
-
+        
         window.CanZoom = true;
         window.CanPan = true;
         window.TopBar = true;
@@ -79,9 +75,6 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
     [UnityEditor.Callbacks.DidReloadScripts]
     private static void OnScriptsReloaded()
     {
-        var so = Resources.Load<VariableListSO>("GlobalVariables");
-        Script.GlobalVariables = so.Variables;
-
         var typesWithMyAttribute =
             from a in System.AppDomain.CurrentDomain.GetAssemblies()
             from t in a.GetTypes()

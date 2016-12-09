@@ -12,8 +12,6 @@ using UnityEditor;
 public class Script
 {
     [JsonIgnore]
-    public static VariableList GlobalVariables;
-    [JsonIgnore]
     public static Dictionary<string, string> BlockTypes;
     [JsonIgnore]
     public static Dictionary<string, string> BlockIdLookup;
@@ -295,14 +293,14 @@ public class ScriptSetVariableAction : ScriptAction
         var keys = new List<string>();
 
 
-        variableList = Script.GlobalVariables;
+        variableList = GlobalVariables.GetInstance();
         keys = variableList.GetKeys();
 
         var group = "Global";
 
         int index = Mathf.Max(0, keys.IndexOf(VariableId)); // clamp to 0
         VariableId = keys[index];
-        MUSEditor.EditorHelper.Dropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
+        MUSEditor.EditorHelper.Dropdown(index, keys.ConvertAll((x) => group + "/" + variableList.GetType(x) + "/" + x), (value) =>
         {
             if (value != index)
                 Value = null;
@@ -318,10 +316,10 @@ public class ScriptSetVariableAction : ScriptAction
 
         group = "Global";
 
-        var valueKeys = variableList.GetKeys().FindAll((x) => Script.GlobalVariables.GetType(x) == type && x != VariableId); // only accept variables of the same type
+        var valueKeys = variableList.GetKeys().FindAll((x) => GlobalVariables.GetInstance().GetType(x) == type && x != VariableId); // only accept variables of the same type
         var valueIndex = Mathf.Max(0, valueKeys.IndexOf(Value)); // clamp to 0
 
-        MUSEditor.EditorHelper.Dropdown(valueIndex, valueKeys.ConvertAll((x) => group + "/" + x), (value) =>
+        MUSEditor.EditorHelper.Dropdown(valueIndex, valueKeys.ConvertAll((x) => group + "/" + variableList.GetType(x) + "/" + x), (value) =>
         {
             Value = valueKeys[value];
         }, GUILayout.Width(150));
@@ -353,7 +351,7 @@ public class ScriptSetVariableUserAction : ScriptAction
         var keys = new List<string>();
 
 
-        variableList = Script.GlobalVariables;
+        variableList = GlobalVariables.GetInstance();
         keys = variableList.GetKeys();
 
         var group = "Global";
@@ -361,7 +359,7 @@ public class ScriptSetVariableUserAction : ScriptAction
 
         int index = Mathf.Max(0, keys.IndexOf(VariableId)); // clamp to 0
         VariableId = keys[index];
-        MUSEditor.EditorHelper.Dropdown(index, keys.ConvertAll((x) => group + "/" + x), (value) =>
+        MUSEditor.EditorHelper.Dropdown(index, keys.ConvertAll((x) => group + "/" + variableList.GetType(x) + "/" + x), (value) =>
         {
             VariableId = keys[value];
 
