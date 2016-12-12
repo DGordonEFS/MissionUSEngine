@@ -25,7 +25,7 @@ public class MissionUSEditorHelper
         if (_menuToShow != null)
             _menuToShow.ShowAsContext();
 
-        Zoom = 1;
+      //  Zoom = 1;
     }
 
     public string TextField(string text)
@@ -75,7 +75,6 @@ public class MissionUSEditorHelper
 
     public void Dropdown(string label, int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
     {
-        Debug.Log("dropdown: " + choices.Count);
         if (choices.Count == 0)
             return;
 
@@ -100,8 +99,6 @@ public class MissionUSEditorHelper
             wasClicked = true;
         else if (option != null && GUILayout.Button(choices[index], style, option))
             wasClicked = true;
-
-        Debug.Log("was clicked: " + wasClicked);
 
         if (wasClicked)
         {

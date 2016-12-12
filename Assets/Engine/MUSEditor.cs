@@ -8,6 +8,11 @@ public class MUSEditor {
     private static MissionUSEditorHelper _editorHelper = new MissionUSEditorHelper();
     public static MissionUSEditorHelper EditorHelper { get { return _editorHelper; } }
 
+    public static void SetEditorHelper(MissionUSEditorHelper helper)
+    {
+        _editorHelper = helper;
+    }
+
     public static GUISkin GuiSkin { get; private set; }
     public static Texture2D Background { get; private set; }
     public static Texture2D BackgroundDark { get; private set; }

@@ -204,8 +204,9 @@ public class MissionUSEditorWindow<TPage> : EditorWindow where TPage : EditorPag
             }
         }
 
-
         _editorHelper.Begin(Zoom);
+        MUSEditor.SetEditorHelper(_editorHelper);
+
         GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), MUSEditor.Background);
 
         MUSEditor.ApplyCustomStyles();
