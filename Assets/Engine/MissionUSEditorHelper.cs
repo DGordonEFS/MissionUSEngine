@@ -75,8 +75,10 @@ public class MissionUSEditorHelper
 
     public void Dropdown(string label, int index, List<string> choices, Action<int> callback, GUILayoutOption option = null)
     {
+        Debug.Log("dropdown: " + choices.Count);
         if (choices.Count == 0)
             return;
+
 
         GenericMenu.MenuFunction2 func = (object obj) =>
         {
@@ -99,8 +101,11 @@ public class MissionUSEditorHelper
         else if (option != null && GUILayout.Button(choices[index], style, option))
             wasClicked = true;
 
+        Debug.Log("was clicked: " + wasClicked);
+
         if (wasClicked)
         {
+            Debug.Log(" show menu");
             var menu = new GenericMenu();
             for (int i = 0; i < choices.Count; i++)
             {

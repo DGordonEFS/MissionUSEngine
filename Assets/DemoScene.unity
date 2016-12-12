@@ -304,6 +304,7 @@ GameObject:
   - 224: {fileID: 186865995}
   - 222: {fileID: 186865997}
   - 114: {fileID: 186865996}
+  - 114: {fileID: 186865998}
   m_Layer: 5
   m_Name: Gun
   m_TagString: Untagged
@@ -362,6 +363,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 186865994}
+--- !u!114 &186865998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 186865994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913ea1ffb8efd0b4a922a0a377c0395b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 
 --- !u!1 &208579436
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,6 +1163,7 @@ GameObject:
   - 224: {fileID: 985445417}
   - 222: {fileID: 985445419}
   - 114: {fileID: 985445418}
+  - 114: {fileID: 985445420}
   m_Layer: 5
   m_Name: Flute
   m_TagString: Untagged
@@ -1208,6 +1222,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 985445416}
+--- !u!114 &985445420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 985445416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913ea1ffb8efd0b4a922a0a377c0395b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 
 --- !u!1 &999193314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1617,6 +1643,7 @@ GameObject:
   - 224: {fileID: 1513715685}
   - 222: {fileID: 1513715687}
   - 114: {fileID: 1513715686}
+  - 114: {fileID: 1513715688}
   m_Layer: 5
   m_Name: Knife
   m_TagString: Untagged
@@ -1675,6 +1702,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1513715684}
+--- !u!114 &1513715688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1513715684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 913ea1ffb8efd0b4a922a0a377c0395b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 
 --- !u!1 &1522338895
 GameObject:
   m_ObjectHideFlags: 0
