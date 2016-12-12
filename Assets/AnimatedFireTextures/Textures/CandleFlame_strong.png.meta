@@ -1,0 +1,619 @@
+fileFormatVersion: 2
+guid: 96c61586cc22e0847bcb4b237f6bf2a6
+timeCreated: 1481307663
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: CandleFlame_strong_0
+    21300002: CandleFlame_strong_1
+    21300004: CandleFlame_strong_2
+    21300006: CandleFlame_strong_3
+    21300008: CandleFlame_strong_4
+    21300010: CandleFlame_strong_5
+    21300012: CandleFlame_strong_6
+    21300014: CandleFlame_strong_7
+    21300016: CandleFlame_strong_8
+    21300018: CandleFlame_strong_9
+    21300020: CandleFlame_strong_10
+    21300022: CandleFlame_strong_11
+    21300024: CandleFlame_strong_12
+    21300026: CandleFlame_strong_13
+    21300028: CandleFlame_strong_14
+    21300030: CandleFlame_strong_15
+    21300032: CandleFlame_strong_16
+    21300034: CandleFlame_strong_17
+    21300036: CandleFlame_strong_18
+    21300038: CandleFlame_strong_19
+    21300040: CandleFlame_strong_20
+    21300042: CandleFlame_strong_21
+    21300044: CandleFlame_strong_22
+    21300046: CandleFlame_strong_23
+    21300048: CandleFlame_strong_24
+    21300050: CandleFlame_strong_25
+    21300052: CandleFlame_strong_26
+    21300054: CandleFlame_strong_27
+    21300056: CandleFlame_strong_28
+    21300058: CandleFlame_strong_29
+    21300060: CandleFlame_strong_30
+    21300062: CandleFlame_strong_31
+    21300064: CandleFlame_strong_32
+    21300066: CandleFlame_strong_33
+    21300068: CandleFlame_strong_34
+    21300070: CandleFlame_strong_35
+    21300072: CandleFlame_strong_36
+    21300074: CandleFlame_strong_37
+    21300076: CandleFlame_strong_38
+    21300078: CandleFlame_strong_39
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 1
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CandleFlame_strong_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_3
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_4
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_5
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_6
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_7
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 819.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_9
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_10
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_11
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_12
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_13
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_14
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_15
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 615.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_17
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_18
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_19
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_20
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_21
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_22
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_23
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 411.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_25
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_26
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_27
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_28
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_29
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_30
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_31
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 207.2
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_33
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_34
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_35
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_36
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_37
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_38
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: CandleFlame_strong_39
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 3.199997
+        width: 128
+        height: 204.8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

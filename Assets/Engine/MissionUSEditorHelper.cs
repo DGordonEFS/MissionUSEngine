@@ -10,19 +10,42 @@ public class MissionUSEditorHelper
 {
 #if UNITY_EDITOR
     private Dictionary<string, int> _dropdowns = new Dictionary<string, int>();
-    public float Zoom;
+    public float Zoom { get; private set; }
 
     private GenericMenu _menuToShow;
 
-    public void Begin()
+    public void Begin(float zoom)
     {
         _menuToShow = null;
+        Zoom = zoom;
     }
 
     public void End()
     {
         if (_menuToShow != null)
             _menuToShow.ShowAsContext();
+
+        Zoom = 1;
+    }
+
+    public string TextField(string text)
+    {
+        return EditorGUILayout.TextField(text);
+    }
+
+    public string TextField(string text, GUIStyle style)
+    {
+        return EditorGUILayout.TextField(text, style);
+    }
+
+    public string TextField(string prefix, string text)
+    {
+        return EditorGUILayout.TextField(prefix, text);
+    }
+
+    public string TextField(string prefix, string text, GUIStyle style)
+    {
+        return EditorGUILayout.TextField(prefix, text, style);
     }
 
     public bool Button(string text)

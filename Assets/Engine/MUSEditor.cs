@@ -5,12 +5,8 @@ using System.Collections.Generic;
 [InitializeOnLoad]
 public class MUSEditor {
     
-    public static MissionUSEditorHelper EditorHelper { get; private set; }
-    public static void SetEditorHelper(MissionUSEditorHelper helper, float zoom)
-    {
-        EditorHelper = helper;
-        helper.Zoom = zoom;
-    }
+    private static MissionUSEditorHelper _editorHelper = new MissionUSEditorHelper();
+    public static MissionUSEditorHelper EditorHelper { get { return _editorHelper; } }
 
     public static GUISkin GuiSkin { get; private set; }
     public static Texture2D Background { get; private set; }
