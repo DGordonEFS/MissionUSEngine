@@ -17,17 +17,25 @@ public class ScriptEditorPage : EditorPage
     }
 
     public string Id;
-    public Script Script;
+    private Script _script;
+    public Script Script {
+        get { return _script; }
+        set
+        {
+            _script = value;
+        }
+    }
 
-
+    public UnityEngine.Object Owner;
+    
     public void Close()
     {
         ScriptEditor.GetInstance().Pages.Remove(this);
     }
 }
 
-public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
-{
+public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage, Script>
+{ 
 
     private static ScriptEditor _instance;
     public static ScriptEditor GetInstance()
@@ -41,8 +49,7 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
    // public Script Script { get; set; }
     
     private Vector2 _scrollPos;
-
-    private float _totalHeight = 0;
+    
     private int _count;
 
     private const float COL_WIDTH = 200;
@@ -64,7 +71,27 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
         window.TopBar = true;
         window.SecondaryBar = true;
         window.ExclusivePages = true;
+
+        window.Mementos.OnChange = () =>
+        {
+        };
+        window.Mementos.Restore = (value) => window.CurrentPage.Script = value;
+        window.Mementos.GetMementoData = () => window.CurrentPage.Script;
+        
         _instance = window;
+    }
+
+    protected override void OnDrawTopBar()
+    {
+        EditorGUILayout.BeginHorizontal();
+
+        if (MUSEditor.EditorHelper.Button("Undo"))
+            Mementos.Undo();
+        else if (MUSEditor.EditorHelper.Button("Redo"))
+            Mementos.Redo();
+
+
+        EditorGUILayout.EndHorizontal();
     }
 
     protected override void OnDrawSecondaryBar()
@@ -90,7 +117,7 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
         {
             foreach (var attribute in type.Attributes)
             {
-                Debug.Log("att: " + attribute.Id + ", type: " + type.Type);
+                //Debug.Log("att: " + attribute.Id + ", type: " + type.Type);
                 Script.BlockTypes.Add(attribute.Id, type.Type.Name);
                 Script.BlockIdLookup.Add(type.Type.Name, attribute.Id);
                 Script.BlockGroupLookup.Add(attribute.Id, attribute.Group);
@@ -113,6 +140,8 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
 
         BeginZoom(Zoom, new Rect(0, 0, Screen.width, Screen.height));
         BeginWindows();
+        GUILayout.Space(100);
+        Debug.Log("Current Script: " + CurrentPage.Script.Blocks.Count);
         DrawColumn(CurrentPage.Script.Blocks, 0, 100);
         EndWindows();
         EndZoom();
@@ -132,7 +161,7 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
             var index = idToIndex[id];
             ScriptBlock block = blocks[index];
             block.OwnerBlocks = blocks;
-            
+            block.CreateMemento = () => Mementos.CreateMemento();
             block.OnGUI(index > 0 ? blocks[index - 1] : null);
         };
 
@@ -237,7 +266,12 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage>
         GUILayout.BeginArea(new Rect(x + Pan.x + 160, y + Pan.y - 10, COL_WIDTH, 100));
         GUILayout.Space(10);
         if (MUSEditor.EditorHelper.Button("Add Block"))
-            blocks.Add(new ScriptWaitAction());
+        {
+            var memento = new Memento<Script>(CurrentPage.Script);
+            Mementos.CreateMemento();
+            var block = new ScriptWaitAction();
+            blocks.Add(block);
+        }
         GUILayout.EndArea();
         
         return y;

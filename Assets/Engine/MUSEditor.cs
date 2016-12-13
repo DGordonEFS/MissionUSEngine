@@ -1,6 +1,76 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections.Generic;
+
+using LitJson;
+
+public class MementoStack<T>
+{
+    private List<Memento<T>> _undo = new List<Memento<T>>();
+    private List<Memento<T>> _redo = new List<Memento<T>>();
+
+    public Action<T> Restore = (T) => { };
+    public Func<T> GetMementoData = () => { return default(T); };
+    public Action OnChange = () => { };
+
+
+    public void CreateMemento()
+    {
+        _undo.Add(new Memento<T>(GetMementoData()));
+        _redo.Clear();
+
+        OnChange();
+    }
+
+    public void Undo()
+    {
+        if (_undo.Count == 0)
+            return;
+
+        var memento = _undo[_undo.Count - 1];
+        _undo.Remove(memento);
+
+        _redo.Add(new Memento<T>(GetMementoData()));
+
+        Restore(memento.GetData());
+        OnChange();
+    }
+
+    public void Redo()
+    {
+        if (_redo.Count == 0)
+            return;
+
+        var memento = _redo[_redo.Count - 1];
+        _redo.Remove(memento);
+
+        _undo.Add(new Memento<T>(GetMementoData()));
+        Restore(memento.GetData());
+        OnChange();
+    }
+}
+
+public class Memento<T>
+{
+    private string _data;
+
+    public Memento(T data)
+    {
+        var sb = new System.Text.StringBuilder();
+        var writer = new JsonWriter(sb);
+        writer.TypeHinting = true;
+        JsonMapper.ToJson(data, writer);
+        _data = sb.ToString();
+    }
+
+    public T GetData()
+    {
+        var reader = new JsonReader(_data);
+        reader.TypeHinting = true;
+        return JsonMapper.ToObject<T>(reader);
+    }
+}
 
 [InitializeOnLoad]
 public class MUSEditor {
@@ -34,6 +104,24 @@ public class MUSEditor {
     private static Dictionary<string, GUIStyle> _appliedStyles = new Dictionary<string, GUIStyle>();
 
     public static GUIStyle GetStyle(string name) { return _customStyles[name.ToUpper()]; }
+
+
+
+    public static string SerializeObject<T>(T obj)
+    {
+        var sb = new System.Text.StringBuilder();
+        var writer = new JsonWriter(sb);
+        writer.TypeHinting = true;
+        JsonMapper.ToJson(obj, writer);
+        return sb.ToString();
+    }
+
+    public static T DeserializeObject<T>(string data)
+    {
+        var reader = new JsonReader(data);
+        reader.TypeHinting = true;
+        return JsonMapper.ToObject<T>(reader);
+    }
 
     static void Refresh()
     {

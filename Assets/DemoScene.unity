@@ -15,7 +15,7 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 7
   m_Fog: 0
-  m_FogColor: {r: 0.91235596, g: 0.9636896, b: 0.9819871, a: 1}
+  m_FogColor: {r: 0.8818866, g: 0.9218541, b: 0.9430361, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
@@ -327,7 +327,7 @@ RectTransform:
   m_RootOrder: 12
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 346, y: -81}
+  m_AnchoredPosition: {x: 351, y: -92.2}
   m_SizeDelta: {x: 151, y: 604}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &186865996
@@ -374,7 +374,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 913ea1ffb8efd0b4a922a0a377c0395b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 
+  Id: gun
+  _serializedData:
+  - gun
+  - '{"_blocks":[{"__type__":"ScriptIfThenContainer, Assembly-CSharp, Version=0.0.0.0,
+    Culture=neutral, PublicKeyToken=null","__value__":{"BlockingType":1,"Contents":{"Condition":null,"Then":[{"__type__":"ScriptWaitAction,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","__value__":{"BlockingType":1,"Seconds":0.0,"IsBlocking":false}}]},"IsBlocking":false}},{"__type__":"ScriptWaitAction,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","__value__":{"BlockingType":1,"Seconds":0.0,"IsBlocking":false}},{"__type__":"ScriptWaitAction,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null","__value__":{"BlockingType":1,"Seconds":0.0,"IsBlocking":false}}]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
 --- !u!1 &208579436
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +555,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 10800000, guid: b2498b078e1b54bd68239c9a29c28a81, type: 2}
       propertyPath: m_Intensity
-      value: 0.6
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: b2498b078e1b54bd68239c9a29c28a81, type: 2}
       propertyPath: m_LocalScale.x
@@ -787,7 +799,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: b2498b078e1b54bd68239c9a29c28a81, type: 2}
       propertyPath: Atmosphere.Fogginess
-      value: 0.4
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: b2498b078e1b54bd68239c9a29c28a81, type: 2}
       propertyPath: Day.SkyColor.key1.rgba
@@ -916,8 +928,8 @@ MonoBehaviour:
   - {fileID: 985445416}
   - {fileID: 186865994}
   - {fileID: 1513715684}
-  BaseIntensity: 0.8
-  RandomIntensity: 0.2
+  BaseIntensity: 0.9
+  RandomIntensity: 0.1
   Speed: 0.5
 --- !u!1 &639670761
 GameObject:
@@ -1233,7 +1245,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 913ea1ffb8efd0b4a922a0a377c0395b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 
+  Id: flute
+  _serializedData:
+  - flute
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
 --- !u!1 &999193314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1713,7 +1733,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 913ea1ffb8efd0b4a922a0a377c0395b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 
+  Id: knife
+  _serializedData:
+  - knife
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
+  - '{"_blocks":[]}'
 --- !u!1 &1522338895
 GameObject:
   m_ObjectHideFlags: 0

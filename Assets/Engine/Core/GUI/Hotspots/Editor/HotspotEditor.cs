@@ -3,14 +3,36 @@ using UnityEditor;
 
 using System.Collections;
 
-[CustomEditor(typeof(Hotspot))]
 public class HotspotEditor : Editor {
+/*
+    SerializedProperty Id;
+    SerializedProperty EnterScript;
+    SerializedProperty ExitScript;
+    SerializedProperty ShowScript;
+    SerializedProperty HideScript;
+    SerializedProperty ActivateScript;
+    SerializedProperty UpdateScript;
 
+    void OnEnable()
+    {
+        Id = serializedObject.FindProperty("Id");
+        EnterScript = serializedObject.FindProperty("EnterScript");
+        ExitScript = serializedObject.FindProperty("ExitScript");
+        ShowScript = serializedObject.FindProperty("ShowScript");
+        HideScript = serializedObject.FindProperty("HideScript");
+        ActivateScript = serializedObject.FindProperty("ActivateScript");
+        UpdateScript = serializedObject.FindProperty("UpdateScript");
+    }
+    */
     public override void OnInspectorGUI()
     {
+        /*
         var hotspot = (Hotspot)target;
 
-        hotspot.Id = MUSEditor.EditorHelper.TextField("Id:", hotspot.Id);
+        serializedObject.Update();
+        EditorGUILayout.PropertyField(Id);
+
+       // hotspot.Id = MUSEditor.EditorHelper.TextField("Id:", hotspot.Id);
 
         if (MUSEditor.EditorHelper.Button("On Enter"))
         {
@@ -42,6 +64,7 @@ public class HotspotEditor : Editor {
             ScriptEditor.GetInstance().AddPage(new ScriptEditorPage() { Group = "hotspot", Script = hotspot.UpdateScript, Id = "Hotspot: " + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name + "_" + hotspot.Id + "_update" });
         }
 
-
+        serializedObject.ApplyModifiedProperties();
+        */
     }
 }

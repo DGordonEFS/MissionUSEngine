@@ -10,9 +10,14 @@ public abstract class EditorPage
     public virtual string Title { get { return null; } }
 }
 
-public class MissionUSEditorWindow<TPage> : EditorWindow where TPage : EditorPage
+
+
+public class MissionUSEditorWindow<TPage, TMemento> : EditorWindow where TPage : EditorPage
 {
     private MissionUSEditorHelper _editorHelper = new MissionUSEditorHelper();
+
+    private MementoStack<TMemento> _mementos = new MementoStack<TMemento>();
+    public MementoStack<TMemento> Mementos { get { return _mementos; } }
 
     public float TopBarHeight { get { return 30; } }
     public float SecondaryBarHeight { get { return 30; } }

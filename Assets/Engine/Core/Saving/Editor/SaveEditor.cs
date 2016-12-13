@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using DarkChariotStudios.Dialogs;
 
-public class SaveEditor : MissionUSEditorWindow<EditorPage>
+public class SaveEditor : MissionUSEditorWindow<EditorPage, Memento<int>>
 {
     [MenuItem("Mission US/Save Game Editor")]
     static void Init()

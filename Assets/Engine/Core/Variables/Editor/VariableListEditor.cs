@@ -8,7 +8,7 @@ public class VariableEditorPage : EditorPage
 
 }
 
-public class VariableListEditor : MissionUSEditorWindow<VariableEditorPage>
+public class VariableListEditor : MissionUSEditorWindow<VariableEditorPage, Memento<int>>
 {
     [MenuItem("Mission US/Data/VariableEditor")]
     static void Init()

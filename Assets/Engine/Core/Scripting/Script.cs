@@ -10,6 +10,8 @@ using UnityEditor;
 #endif
 
 
+
+[Serializable]
 public class Script
 {
     [NonSerialized]
@@ -62,6 +64,7 @@ public class Script
     }
 }
 
+[Serializable]
 public abstract class ScriptBlock
 {
     [NonSerialized]
@@ -95,6 +98,10 @@ public abstract class ScriptBlock
     [NonSerialized]
     [JsonIgnore]
     public List<ScriptBlock> OwnerBlocks;
+
+    [NonSerialized]
+    [JsonIgnore]
+    public Action CreateMemento;
     
     public void OnGUI(ScriptBlock prevBlock)
     {
@@ -128,9 +135,13 @@ public abstract class ScriptBlock
             var newType = ids[value];
             if (newType != selectedType)
             {
+                CreateMemento();
+
                 int selfIndex = OwnerBlocks.IndexOf(this);
                 OwnerBlocks.RemoveAt(selfIndex);
-                OwnerBlocks.Insert(selfIndex, (ScriptBlock)Type.GetType(Script.BlockTypes[newType]).GetConstructor(new Type[0]).Invoke(new object[0]));
+
+                var newBlock = (ScriptBlock)Type.GetType(Script.BlockTypes[newType]).GetConstructor(new Type[0]).Invoke(new object[0]);
+                OwnerBlocks.Insert(selfIndex, newBlock);
             }
         }, GUILayout.Width(200));
 
@@ -181,11 +192,13 @@ public abstract class ScriptBlock
 #endif
 }
 
+[Serializable]
 public class ScriptAction : ScriptBlock
 {
 }
 
 
+[Serializable]
 public class ScriptCondition : ScriptBlock
 {
     public string Evaluate(Script script)
@@ -199,6 +212,7 @@ public class ScriptCondition : ScriptBlock
     }
 }
 
+[Serializable]
 [ScriptActionData(Group="Flow", Id = "Wait")]
 public class ScriptWaitAction : ScriptAction
 {
@@ -220,6 +234,7 @@ public class ScriptWaitAction : ScriptAction
 }
 
 
+[Serializable]
 public class ScriptHotspotAction : ScriptAction
 {
     public string Id;
@@ -233,6 +248,7 @@ public class ScriptHotspotAction : ScriptAction
 #endif
 }
 
+[Serializable]
 [ScriptActionData(Group="Hotspots", Id = "Fade")]
 public class ScriptHotspotFadeAction : ScriptHotspotAction
 {
@@ -254,6 +270,7 @@ public class ScriptHotspotFadeAction : ScriptHotspotAction
 #endif
 }
 
+[Serializable]
 [ScriptActionData(Group = "Hotspots", Id = "Visible")]
 public class ScriptHotspotVisibleAction : ScriptHotspotAction
 {
@@ -275,6 +292,7 @@ public class ScriptHotspotVisibleAction : ScriptHotspotAction
 #endif
 }
 
+[Serializable]
 [ScriptActionData(Group="Flow", Id = "Return")]
 public class ScriptReturnAction : ScriptAction
 {
@@ -287,6 +305,7 @@ public class ScriptReturnAction : ScriptAction
     }
 }
 
+[Serializable]
 [ScriptActionData(Group = "Variables", Id = "SetVariable")]
 public class ScriptSetVariableAction : ScriptAction
 {
@@ -345,6 +364,7 @@ public class ScriptSetVariableAction : ScriptAction
     }
 }
 
+[Serializable]
 [ScriptActionData(Group = "Variables", Id = "SetVariableUser")]
 public class ScriptSetVariableUserAction : ScriptAction
 {
@@ -433,6 +453,7 @@ public abstract class ScriptContainer : ScriptAction
     public ScriptIfThen Contents = new ScriptIfThen();
 }
 
+[Serializable]
 [ScriptActionData(Group="Flow", Id = "If")]
 public class ScriptIfThenContainer : ScriptContainer
 {
@@ -446,6 +467,7 @@ public class ScriptIfThenContainer : ScriptContainer
 #endif
 }
 
+[Serializable]
 [ScriptActionData(Group = "Flow", Id = "ElseIf")]
 public class ScriptElseIfThenContainer : ScriptContainer
 {
@@ -471,13 +493,14 @@ public class ScriptElseThenContainer : ScriptContainer
 #endif
 }
 
-[System.Serializable]
+[Serializable]
 public class ScriptIfThen
 {
     public ScriptCondition Condition;
     public List<ScriptBlock> Then = new List<ScriptBlock>();
 }
 
+[Serializable]
 [ScriptActionData(Id = "While")]
 public class ScriptWhileContainer : ScriptContainer
 {
@@ -485,6 +508,7 @@ public class ScriptWhileContainer : ScriptContainer
 }
 
 
+[Serializable]
 public class ScriptActionData : System.Attribute
 {
     public string Group;

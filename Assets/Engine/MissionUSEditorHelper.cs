@@ -33,6 +33,11 @@ public class MissionUSEditorHelper
         return EditorGUILayout.TextField(text);
     }
 
+    public string TextField(string text, GUILayoutOption option)
+    {
+        return EditorGUILayout.TextField(text, option);
+    }
+
     public string TextField(string text, GUIStyle style)
     {
         return EditorGUILayout.TextField(text, style);

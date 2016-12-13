@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using System.Linq;
 
-public class ErrorEditor : MissionUSEditorWindow<EditorPage>
+public class ErrorEditor : MissionUSEditorWindow<EditorPage, Memento<int>>
 {
     [MenuItem ("Mission US/Debug/Error Panel")]
     static void Init()

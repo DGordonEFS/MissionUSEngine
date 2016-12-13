@@ -29,7 +29,7 @@ public class DialogEditorPage : EditorPage
     public List<DialogNode> Nodes;
 }
 
-public class DialogEditor : MissionUSEditorWindow<DialogEditorPage>
+public class DialogEditor : MissionUSEditorWindow<DialogEditorPage, Memento<Dialog>>
 {
     public static DialogEditor Instance { get; private set; }
 
@@ -568,7 +568,7 @@ public class DialogEditor : MissionUSEditorWindow<DialogEditorPage>
     
 }
 
-public class DialogSaveAsPopup : MissionUSEditorWindow<EditorPage>
+public class DialogSaveAsPopup : MissionUSEditorWindow<EditorPage, Memento<int>>
 {
     public static DialogSaveAsPopup Init(DialogEditor launcher)
     {

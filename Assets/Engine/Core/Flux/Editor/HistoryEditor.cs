@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 using DarkChariotStudios.Dialogs;
 
-public class HistoryEditor : MissionUSEditorWindow<EditorPage>
+public class HistoryEditor : MissionUSEditorWindow<EditorPage, Memento<int>>
 {
 
 
