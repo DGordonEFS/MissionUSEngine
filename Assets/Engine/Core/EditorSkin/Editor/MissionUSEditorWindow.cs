@@ -212,7 +212,7 @@ public class MissionUSEditorWindow<TPage, TMemento> : EditorWindow where TPage :
         _editorHelper.Begin(Zoom);
         MUSEditor.SetEditorHelper(_editorHelper);
 
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), MUSEditor.Background);
+       // GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), MUSEditor.Background);
 
         MUSEditor.ApplyCustomStyles();
         using (new EditorGUI.DisabledScope(!Enable))
