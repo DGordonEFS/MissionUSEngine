@@ -54,6 +54,8 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage, Script>
 
     private const float COL_WIDTH = 200;
 
+    private bool _refresh;
+
     [MenuItem("Mission US/Data/ScriptEditor")]
     static void Init()
     {
@@ -90,6 +92,8 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage, Script>
         else if (MUSEditor.EditorHelper.Button("Redo"))
             Mementos.Redo();
 
+        if (MUSEditor.EditorHelper.Button("Refresh"))
+            _refresh = true;
 
         EditorGUILayout.EndHorizontal();
     }
@@ -124,6 +128,34 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage, Script>
             }
         }
         Script.BlockIds = Script.BlockTypes.Keys.ToList();
+
+
+        LoadConditions();
+    }
+
+    static void LoadConditions()
+    {
+        var typesWithMyAttribute =
+            from a in System.AppDomain.CurrentDomain.GetAssemblies()
+            from t in a.GetTypes()
+            let attributes = t.GetCustomAttributes(typeof(ScriptConditionData), true)
+            where attributes != null && attributes.Length > 0
+            select new { Type = t, Attributes = attributes.Cast<ScriptConditionData>() };
+
+        ScriptCondition.ConditionTypes = new Dictionary<string, string>();
+        ScriptCondition.ConditionIdLookup = new Dictionary<string, string>();
+        ScriptCondition.ConditionGroupLookup = new Dictionary<string, string>();
+        foreach (var type in typesWithMyAttribute)
+        {
+            foreach (var attribute in type.Attributes)
+            {
+                //Debug.Log("att: " + attribute.Id + ", type: " + type.Type);
+                ScriptCondition.ConditionTypes.Add(attribute.Id, type.Type.Name);
+                ScriptCondition.ConditionIdLookup.Add(type.Type.Name, attribute.Id);
+                ScriptCondition.ConditionGroupLookup.Add(attribute.Id, attribute.Group);
+            }
+        }
+        ScriptCondition.ConditionIds = ScriptCondition.ConditionTypes.Keys.ToList();
     }
 
     void OnDestroy()
@@ -145,12 +177,16 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage, Script>
         DrawColumn(CurrentPage.Script.Blocks, 0, 100);
         EndWindows();
         EndZoom();
+
+        _refresh = false;
     }
 
     float DrawColumn(List<ScriptBlock> blocks, int col, float y)
     {
-        float x = 50 * (col+1) + 400 * col;
-        float nextX = 50 * (col + 2) + 400 * (col + 1);
+        var colWidth = 450;
+
+        float x = 50 * (col+1) + colWidth * col;
+        float nextX = 50 * (col + 2) + colWidth * (col + 1);
 
         float buffer = 75;
 
@@ -186,6 +222,8 @@ public class ScriptEditor : MissionUSEditorWindow<ScriptEditorPage, Script>
             _count++;
             idToIndex[_count] = i;
 
+            if (_refresh)
+                block.EditorSize = new Vector2(450, 60);
             var extend = 0;
             var blockRect = GUILayout.Window(_count, new Rect(x + Pan.x, y + Pan.y, block.EditorSize.x, block.EditorSize.y + extend), drawBlock, "");
             block.EditorSize.x = blockRect.width;

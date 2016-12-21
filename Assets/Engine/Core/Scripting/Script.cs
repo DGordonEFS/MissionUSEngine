@@ -73,7 +73,7 @@ public abstract class ScriptBlock
 
     [NonSerialized]
     [JsonIgnore]
-    public Vector2 EditorSize = new Vector2(400, 60);
+    public Vector2 EditorSize = new Vector2(450, 60);
 
     public enum BlockingTypes { No, Yes, Optional }
     public virtual BlockingTypes BlockingType { get { return BlockingTypes.Optional; } }
@@ -168,7 +168,7 @@ public abstract class ScriptBlock
             
         }
 
-        GUILayout.Space(170 - offset);
+        EditorGUILayout.Space();
         if (MUSEditor.EditorHelper.Button("X"))
         {
             IsDisposed = true;
@@ -198,19 +198,6 @@ public class ScriptAction : ScriptBlock
 }
 
 
-[Serializable]
-public class ScriptCondition : ScriptBlock
-{
-    public string Evaluate(Script script)
-    {
-        return OnEvaluate(script);
-    }
-
-    protected virtual string OnEvaluate(Script script)
-    {
-        return null;
-    }
-}
 
 [Serializable]
 [ScriptActionData(Group="Flow", Id = "Wait")]
@@ -462,7 +449,8 @@ public class ScriptIfThenContainer : ScriptContainer
 #if UNITY_EDITOR
     protected override void OnGUIDraw(ScriptBlock prevBlock)
     {
-        GUILayout.Space(50);
+        var conditions = Contents.Conditions;
+        conditions.OnGUIDraw(this);
     }
 #endif
 }
@@ -496,7 +484,7 @@ public class ScriptElseThenContainer : ScriptContainer
 [Serializable]
 public class ScriptIfThen
 {
-    public ScriptCondition Condition;
+    public ScriptCondition Conditions = new ScriptCondition();
     public List<ScriptBlock> Then = new List<ScriptBlock>();
 }
 
@@ -510,6 +498,13 @@ public class ScriptWhileContainer : ScriptContainer
 
 [Serializable]
 public class ScriptActionData : System.Attribute
+{
+    public string Group;
+    public string Id;
+}
+
+[Serializable]
+public class ScriptConditionData : System.Attribute
 {
     public string Group;
     public string Id;

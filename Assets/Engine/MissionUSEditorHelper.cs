@@ -98,11 +98,15 @@ public class MissionUSEditorHelper
         GUIStyle style = "minipopup";
         bool wasClicked = false;
 
-        
 
-        if (option == null && GUILayout.Button(choices[index], style))
+        string text = choices[index];
+        int indexOfSlash = text.LastIndexOf("/");
+        if (indexOfSlash > -1)
+            text = text.Substring(indexOfSlash + 1, text.Length - (indexOfSlash + 1));
+
+        if (option == null && GUILayout.Button(text, style))
             wasClicked = true;
-        else if (option != null && GUILayout.Button(choices[index], style, option))
+        else if (option != null && GUILayout.Button(text, style, option))
             wasClicked = true;
 
         if (wasClicked)

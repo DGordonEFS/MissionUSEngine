@@ -71,6 +71,9 @@ public class VariableList
 
     public VariableData.VariableTypes GetType(string key)
     {
+        if (key == null)
+            return default(VariableData.VariableTypes);
+
         key = key.ToUpper();
         if (!_variables.ContainsKey(key))
             return default(VariableData.VariableTypes);
